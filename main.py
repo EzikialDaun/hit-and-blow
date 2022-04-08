@@ -1,4 +1,5 @@
 import os
+import json
 from pygame import mixer
 from origin import create_task
 from origin import is_unique
@@ -14,14 +15,30 @@ def hit_blow():
     print("Team: 탈3진")
     print("Authors: 금용호, 김민석, 박수민, 임민영")
     print("-" * board_count)
-    # 위치 수(p)
-    digit = int(input("정답의 자릿수(정수, p)를 입력하세요. (p >= 1) ==> "))
-    # p >= 1
+    config = get_config()
+    # 자릿수(d)
+    digit = 0
+    # 색깔 수(c)
+    color = 0
+    # 시도 가능 횟수(t)
+    try_count = 0
+    print("최근 게임 설정")
+    print("자릿수: %d" % config["digit"])
+    print("색깔의 수: %d" % config["color"])
+    print("기회의 수: %d" % config["tryCount"])
+    answer = input("최근에 진행한 게임의 설정을 불러오시겠습니까? (y/n) ==> ")
+    if answer == 'y' or answer == 'Y' or answer == '1' or answer == 't' or answer =='T':
+        digit = config["digit"]
+        color = config["color"]
+        try_count = config["tryCount"]
+    else:
+        digit = int(input("정답의 자릿수(정수, d)를 입력하세요. (d >= 1) ==> "))
+        color = int(input("색깔의 수(정수, c)를 입력하세요. (c >= 1, c >= d) ==> "))
+        try_count = int(input("시도 가능한 횟수(정수, t)를 입력하세요. (t >= 1) ==> "))
+    # d >= 1
     if digit < 1:
         print("자릿수는 1 이상이어야 합니다.")
         return
-    # 색깔 수(c)
-    color = int(input("색깔의 수(정수, c)를 입력하세요. (c >= 1, c >= p) ==> "))
     # c >= 1
     if color < 1:
         print("색깔의 수는 1 이상이어야 합니다.")
@@ -30,13 +47,14 @@ def hit_blow():
     if color < digit:
         print("색깔의 수는 자릿수보다 많아야 합니다.")
         return
+    # t >= 1
+    if try_count <= 0:
+        print("기회의 수는 1 이상이어야 합니다.")
+        return
+    config_dict = {"digit":digit, "color":color, "tryCount":try_count}
+    set_config(config_dict)
     # 문제 생성
     task = (create_task.create_task(color, digit))
-    # 시도 가능 횟수
-    try_count = int(input("시도 가능한 횟수(정수, t)를 입력하세요. (t >= 1) ==> "))
-    if try_count <= 0:
-        print("입력한 값이 올바르지 않습니다.")
-        return
     # 성공 여부
     is_success = False
     # 최대 시도 가능 횟수만큼 반복
@@ -86,6 +104,25 @@ def set_playlist():
     mixer.music.load(playlist.pop())
     mixer.music.set_volume(0.1)
     mixer.music.play()
+
+config_path = './config.json'
+def get_config():
+    with open(config_path, 'r') as f:
+        json_data = json.load(f)
+    digit = json_data['latestConfig']['digit']
+    color = json_data['latestConfig']['color']
+    try_count = json_data['latestConfig']['tryCount']
+    result = {'digit':digit, 'color':color, 'tryCount':try_count}
+    return result
+
+def set_config(config):
+    with open(config_path, 'r') as f:
+        json_data = json.load(f)
+    json_data['latestConfig']['digit'] = config['digit']
+    json_data['latestConfig']['color'] = config['color']
+    json_data['latestConfig']['tryCount'] = config['tryCount']
+    with open(config_path, 'w') as f:
+        json.dump(json_data, f, indent="\t")
 
 # 임시로 비활성화
 # set_playlist()
