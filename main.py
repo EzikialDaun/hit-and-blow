@@ -9,15 +9,28 @@ def hit_blow():
     # 경계선 숫자
     board_count = 80
     print("-" * board_count)
-    # 위치 수
-    position = int(input("위치의 수(정수, p)를 입력하세요. (p >= 1) ==> "))
-    # 색깔 수
-    color = int(input("색깔의 수(정수, c)를 입력하세요. (c >= 1, c >= p) ==> "))
-    # 문제
-    task = (create_task.create_task(color, position))
-    if len(task) == 0:
-        print("입력한 값이 올바르지 않습니다.")
+    print("Project: Hit & Blow")
+    print("Team: 탈3진")
+    print("Authors: 금용호, 김민석, 박수민, 임민영")
+    print("-" * board_count)
+    # 위치 수(p)
+    digit = int(input("정답의 자릿수(정수, p)를 입력하세요. (p >= 1) ==> "))
+    # p >= 1
+    if digit < 1:
+        print("자릿수는 1 이상이어야 합니다.")
         return
+    # 색깔 수(c)
+    color = int(input("색깔의 수(정수, c)를 입력하세요. (c >= 1, c >= p) ==> "))
+    # c >= 1
+    if color < 1:
+        print("색깔의 수는 1 이상이어야 합니다.")
+        return
+    # c >= p
+    if color < digit:
+        print("색깔의 수는 자릿수보다 많아야 합니다.")
+        return
+    # 문제 생성
+    task = (create_task.create_task(color, digit))
     # 시도 가능 횟수
     try_count = int(input("시도 가능한 횟수(정수, t)를 입력하세요. (t >= 1) ==> "))
     if try_count <= 0:
@@ -32,19 +45,19 @@ def hit_blow():
             print("-" * board_count)
             print("남은 기회: %d" % (try_count - i))
             # 플레이어 입력
-            answer = input("정수 %d개를 공백으로 분리하여 입력하세요. (0 ~ %d) ==> " % (position, color - 1))
+            answer = input("정수 %d개를 공백으로 분리하여 입력하세요. (0 ~ %d) ==> " % (digit, color - 1))
             # 자릿수가 position과 맞는지 검사
             answer_str_list = answer.split()
             # 문자열 리스트를 숫자 리스트로 변환
             answer_list = str_list_to_int_list.str_list_to_int_list(answer_str_list)
-            if len(answer_list) == position:
+            if len(answer_list) == digit:
                 # 중복이 있는지 검사
                 if is_unique.is_unique(answer_list):
                     # 값의 범위를 검사
                     if is_list_validate.is_list_validate(answer_list, 0, color):
                         result_dict = check_answer.check_answer(answer_list, task)
                         print("hit: %d, blow: %d" % (result_dict["hit"], result_dict["blow"]))
-                        if result_dict["hit"] == position:
+                        if result_dict["hit"] == digit:
                             is_success = True
                             break
                         else:

@@ -15,9 +15,8 @@ def check_answer(user_data, task):
     for i in range(0, len(task)):
         if task[i] == user_data[i]:
             hit += 1
-        else:
-            if user_data[i] in task:
-                blow += 1
+        elif user_data[i] in task:
+            blow += 1
     result.update({"hit":hit})
     result.update({"blow":blow})
     return result

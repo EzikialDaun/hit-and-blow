@@ -3,7 +3,5 @@
 # ex) ["1", "2", "5", "4"]         ==>      [1, 2, 5, 4]
 # ex) ["2", "1", "0", "3"]         ==>      [2, 1, 0, 3]
 def str_list_to_int_list(data):
-    result = []
-    for i in range(0, len(data)):
-        result.append(int(data[i]))
+    result = [int(i) for i in data]
     return result
