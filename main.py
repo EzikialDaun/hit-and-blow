@@ -1,4 +1,5 @@
 import os
+from pygame import mixer
 from origin import create_task
 from origin import is_unique
 from origin import str_list_to_int_list
@@ -76,7 +77,19 @@ def hit_blow():
         print("정답은")
         print(task)
         print("입니다.")
-    
+
+# 플레이리스트 재생
+def set_playlist():
+    playlist = []
+    playlist.append('./resource/music/Yugioh GX OST 90 Fervent Duel! (HQ).mp3')
+    mixer.init()
+    mixer.music.load(playlist.pop())
+    mixer.music.set_volume(0.1)
+    mixer.music.play()
+
+# 임시로 비활성화
+# set_playlist()
 hit_blow()
 # 자동 창꺼짐 방지
 os.system("pause")
+mixer.quit()
