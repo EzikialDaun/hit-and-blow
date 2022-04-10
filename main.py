@@ -1,8 +1,6 @@
-import os
 import json
 from pygame import mixer
 from origin import create_task
-from origin import is_unique
 from origin import str_list_to_int_list
 from origin import is_list_validate
 from origin import check_answer
@@ -26,7 +24,9 @@ def hit_blow():
     print("자릿수: %d" % config["digit"])
     print("색깔의 수: %d" % config["color"])
     print("기회의 수: %d" % config["tryCount"])
+    print("-" * board_count)
     answer = input("최근에 진행한 게임의 설정을 불러오시겠습니까? (y/n) ==> ")
+    print("-" * board_count)
     if answer == 'y' or answer == 'Y' or answer == '1' or answer == 't' or answer =='T':
         digit = config["digit"]
         color = config["color"]
@@ -70,21 +70,17 @@ def hit_blow():
             # 문자열 리스트를 숫자 리스트로 변환
             answer_list = str_list_to_int_list.str_list_to_int_list(answer_str_list)
             if len(answer_list) == digit:
-                # 중복이 있는지 검사
-                if is_unique.is_unique(answer_list):
-                    # 값의 범위를 검사
-                    if is_list_validate.is_list_validate(answer_list, 0, color):
-                        result_dict = check_answer.check_answer(answer_list, task)
-                        print("hit: %d, blow: %d" % (result_dict["hit"], result_dict["blow"]))
-                        if result_dict["hit"] == digit:
-                            is_success = True
-                            break
-                        else:
-                            is_success = False
+                # 값의 범위를 검사
+                if is_list_validate.is_list_validate(answer_list, 0, color):
+                    result_dict = check_answer.check_answer(answer_list, task)
+                    print("hit: %d, blow: %d" % (result_dict["hit"], result_dict["blow"]))
+                    if result_dict["hit"] == digit:
+                        is_success = True
+                        break
                     else:
-                        print("값의 범위가 올바르지 않습니다.")
+                        is_success = False
                 else:
-                    print("입력이 중복되었습니다.")
+                    print("값의 범위가 올바르지 않습니다.")
             else:
                 print("숫자의 갯수가 올바르지 않습니다.")
     print("-" * board_count)
@@ -127,6 +123,4 @@ def set_config(config):
 # 임시로 비활성화
 # set_playlist()
 hit_blow()
-# 자동 창꺼짐 방지
-os.system("pause")
 mixer.quit()
