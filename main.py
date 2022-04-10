@@ -1,5 +1,4 @@
 import json
-from pygame import mixer
 from origin import create_task
 from origin import str_list_to_int_list
 from origin import is_list_validate
@@ -92,15 +91,6 @@ def hit_blow():
         print(task)
         print("입니다.")
 
-# 플레이리스트 재생
-def set_playlist():
-    playlist = []
-    playlist.append('./resource/music/Yugioh GX OST 90 Fervent Duel! (HQ).mp3')
-    mixer.init()
-    mixer.music.load(playlist.pop())
-    mixer.music.set_volume(0.1)
-    mixer.music.play()
-
 config_path = './config.json'
 def get_config():
     with open(config_path, 'r') as f:
@@ -120,7 +110,4 @@ def set_config(config):
     with open(config_path, 'w') as f:
         json.dump(json_data, f, indent="\t")
 
-# 임시로 비활성화
-# set_playlist()
 hit_blow()
-mixer.quit()
