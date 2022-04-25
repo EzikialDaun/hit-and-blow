@@ -5,19 +5,22 @@ import random
 # 각 수의 범위는 0 ~ (c - 1)
 # 리스트의 길이는 p
 
-# 입력이 상기 조건과 다를 경우 [] 리턴
-# ex) c = 6, p = 4      ==>     [0, 2, 3, 5]
+# ex) c = 6, p = 4      ==>     [0, 2, 3, 5](단, 각 자리의 수는 랜덤)
 # ex) c = 4, p = 6      ==>     []
 # ex) c = 0, p = 1      ==>     []
+# ex) c = 4, p = 4      ==>     [1, 0, 2, 3](단, 각 자리의 수는 랜덤)
 def create_task(color, position):
     result = []
     # 코드 작성
     return result
 
 
-# 테스트 케이스
-print(create_task(6, 4))
-print(create_task(5, 3))
-print(create_task(4, 6))
-print(create_task(0, 1))
-print(create_task(11, 10))
+# 테스트
+if __name__ == "__main__":
+    print(create_task(6, 4))
+    print(create_task(5, 3))
+    print(create_task(4, 6))
+    print(create_task(0, 1))
+    print(create_task(11, 10))
+    print(create_task(4, 4))
+    

@@ -58,6 +58,8 @@ class WindowClass(QMainWindow, form_class):
         self.arrow_down.move(110 + (200 * self.current_cursor), 20)
 
 
+# 본 파일에서 실행되었을 때 동작
+# 다른 파일에서 import하여 실행했을 때에는 동작하지 않음.
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     myWindow = WindowClass()

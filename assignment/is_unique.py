@@ -5,7 +5,12 @@
 # ex) [0, 1, 2, 3]      ==>     True
 # ex) [0, 0, 1, 2]      ==>     False
 def is_unique(data):
+    # 초기값은 True나 False 마음대로
+    result = False
     # 코드 작성
+    return result
 
-print(is_unique([0, 1, 2, 3]))
-print(is_unique([0, 0, 1, 2]))
+# 테스트
+if __name__ == "__main__":
+    print(is_unique([0, 1, 2, 3]))
+    print(is_unique([0, 0, 1, 2]))

@@ -7,5 +7,8 @@ def str_list_to_int_list(data):
     # 코드 작성
     return result
 
-print(str_list_to_int_list(["1", "2", "5", "4"]))
-print(str_list_to_int_list(["2", "1", "0", "3"]))
+
+# 테스트
+if __name__ == "__main__":
+    print(str_list_to_int_list(["1", "2", "5", "4"]))
+    print(str_list_to_int_list(["2", "1", "0", "3"]))

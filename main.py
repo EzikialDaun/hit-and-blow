@@ -1,8 +1,9 @@
 import json
-from origin import create_task
-from origin import str_list_to_int_list
-from origin import is_list_validate
-from origin import check_answer
+from origin import create_task as ct
+from origin import str_list_to_int_list as slti
+from origin import is_list_validate as ilv
+from origin import check_answer as ca
+
 
 def hit_blow():
     # 경계선 숫자
@@ -25,12 +26,12 @@ def hit_blow():
     print("기회의 수: %d" % config["tryCount"])
     print("-" * board_count)
     answer = input("최근에 진행한 게임의 설정을 불러오시겠습니까? (y/n) ==> ")
-    print("-" * board_count)
-    if answer == 'y' or answer == 'Y' or answer == '1' or answer == 't' or answer =='T':
+    if answer == 'y' or answer == 'Y':
         digit = config["digit"]
         color = config["color"]
         try_count = config["tryCount"]
     else:
+        print("-" * board_count)
         digit = int(input("정답의 자릿수(정수, d)를 입력하세요. (d >= 1) ==> "))
         color = int(input("색깔의 수(정수, c)를 입력하세요. (c >= 1, c >= d) ==> "))
         try_count = int(input("시도 가능한 횟수(정수, t)를 입력하세요. (t >= 1) ==> "))
@@ -50,38 +51,38 @@ def hit_blow():
     if try_count <= 0:
         print("기회의 수는 1 이상이어야 합니다.")
         return
-    config_dict = {"digit":digit, "color":color, "tryCount":try_count}
+    config_dict = {"digit": digit, "color": color, "tryCount": try_count}
     set_config(config_dict)
     # 문제 생성
-    task = (create_task.create_task(color, digit))
+    task = (ct.create_task(color, digit))
     # 성공 여부
     is_success = False
     # 최대 시도 가능 횟수만큼 반복
     # 횟수 안에 정답 맞추면 성공
     # 맞추지 못하면 실패
-    for i in range(0, try_count):
-            print("-" * board_count)
-            print("남은 기회: %d" % (try_count - i))
-            # 플레이어 입력
-            answer = input("정수 %d개를 공백으로 분리하여 입력하세요. (0 ~ %d) ==> " % (digit, color - 1))
-            # 자릿수가 position과 맞는지 검사
-            answer_str_list = answer.split()
-            # 문자열 리스트를 숫자 리스트로 변환
-            answer_list = str_list_to_int_list.str_list_to_int_list(answer_str_list)
-            if len(answer_list) == digit:
-                # 값의 범위를 검사
-                if is_list_validate.is_list_validate(answer_list, 0, color):
-                    result_dict = check_answer.check_answer(answer_list, task)
-                    print("hit: %d, blow: %d" % (result_dict["hit"], result_dict["blow"]))
-                    if result_dict["hit"] == digit:
-                        is_success = True
-                        break
-                    else:
-                        is_success = False
+    for i in range(try_count):
+        print("-" * board_count)
+        print("남은 기회: %d" % (try_count - i))
+        # 플레이어 입력
+        answer = input("정수 %d개를 공백(space)으로 분리하여 입력하세요. (0 ~ %d) ==> " % (digit, color - 1))
+        # 자릿수가 position과 맞는지 검사
+        answer_str_list = answer.split()
+        # 문자열 리스트를 숫자 리스트로 변환
+        answer_list = slti.str_list_to_int_list(answer_str_list)
+        if len(answer_list) == digit:
+            # 값의 범위를 검사
+            if ilv.is_list_validate(answer_list, 0, color):
+                result_dict = ca.check_answer(answer_list, task)
+                print("hit: %d, blow: %d" % (result_dict["hit"], result_dict["blow"]))
+                if result_dict["hit"] == digit:
+                    is_success = True
+                    break
                 else:
-                    print("값의 범위가 올바르지 않습니다.")
+                    is_success = False
             else:
-                print("숫자의 갯수가 올바르지 않습니다.")
+                print("값의 범위가 올바르지 않습니다.")
+        else:
+            print("숫자의 갯수가 올바르지 않습니다.")
     print("-" * board_count)
     if is_success:
         print("성공")
@@ -91,15 +92,19 @@ def hit_blow():
         print(task)
         print("입니다.")
 
+
 config_path = './config.json'
+
+
 def get_config():
     with open(config_path, 'r') as f:
         json_data = json.load(f)
     digit = json_data['latestConfig']['digit']
     color = json_data['latestConfig']['color']
     try_count = json_data['latestConfig']['tryCount']
-    result = {'digit':digit, 'color':color, 'tryCount':try_count}
+    result = {'digit': digit, 'color': color, 'tryCount': try_count}
     return result
+
 
 def set_config(config):
     with open(config_path, 'r') as f:
@@ -109,5 +114,6 @@ def set_config(config):
     json_data['latestConfig']['tryCount'] = config['tryCount']
     with open(config_path, 'w') as f:
         json.dump(json_data, f, indent="\t")
+
 
 hit_blow()

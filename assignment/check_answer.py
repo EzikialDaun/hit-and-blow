@@ -13,7 +13,10 @@ def check_answer(user_data, task):
     # 코드 작성
     return result
 
-print(check_answer([0, 1, 2, 3], [5, 3, 2, 1]))
-print(check_answer([0, 5, 1, 4], [5, 3, 2, 1]))
-print(check_answer([5, 4, 0, 1], [5, 3, 2, 1]))
-print(check_answer([5, 3, 2, 1], [5, 3, 2, 1]))
+
+# 테스트
+if __name__ == "__main__":
+    print(check_answer([0, 1, 2, 3], [5, 3, 2, 1]))
+    print(check_answer([0, 5, 1, 4], [5, 3, 2, 1]))
+    print(check_answer([5, 4, 0, 1], [5, 3, 2, 1]))
+    print(check_answer([5, 3, 2, 1], [5, 3, 2, 1]))
