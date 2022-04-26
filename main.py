@@ -1,8 +1,9 @@
-import json
+import json.decoder
 from origin import create_task as ct
 from origin import str_list_to_int_list as slti
 from origin import is_list_validate as ilv
 from origin import check_answer as ca
+from origin import json_config as jc
 
 
 def hit_blow():
@@ -13,24 +14,39 @@ def hit_blow():
     print("Team: 탈3진")
     print("Authors: 금용호, 김민석, 박수민, 임민영")
     print("-" * board_count)
-    config = get_config()
     # 자릿수(d)
     digit = 0
     # 색깔 수(c)
     color = 0
     # 시도 가능 횟수(t)
     try_count = 0
-    print("최근 게임 설정")
-    print("자릿수: %d" % config["digit"])
-    print("색깔의 수: %d" % config["color"])
-    print("기회의 수: %d" % config["tryCount"])
-    print("-" * board_count)
-    answer = input("최근에 진행한 게임의 설정을 불러오시겠습니까? (y/n) ==> ")
-    if answer == 'y' or answer == 'Y':
-        digit = config["digit"]
-        color = config["color"]
-        try_count = config["tryCount"]
+    # 파일 설정 불러오기
+    config_path = './config.json'
+    try:
+        config = jc.get_config(config_path)
+    except FileNotFoundError:
+        config = {}
+    except json.decoder.JSONDecodeError:
+        config = {}
+    # 파일이 있으면 설정 불러올 것인지 직접 입력할 것인지 선택
+    is_direct = False
+    if config != {}:
+        print("최근 게임 설정")
+        print("자릿수: %d" % config["digit"])
+        print("색깔의 수: %d" % config["color"])
+        print("기회의 수: %d" % config["tryCount"])
+        print("-" * board_count)
+        answer = input("최근에 진행한 게임의 설정을 불러오시겠습니까? (y/n) ==> ")
+        if answer == 'y' or answer == 'Y':
+            digit = config["digit"]
+            color = config["color"]
+            try_count = config["tryCount"]
+        else:
+            is_direct = True
     else:
+        print("게임 설정 파일이 존재하지 않습니다. 새 설정 입력을 진행합니다.")
+    # 파일이 없거나 직접 입력 모드이면 직접 입력
+    if config == {} or is_direct:
         print("-" * board_count)
         digit = int(input("정답의 자릿수(정수, d)를 입력하세요. (d >= 1) ==> "))
         color = int(input("색깔의 수(정수, c)를 입력하세요. (c >= 1, c >= d) ==> "))
@@ -52,7 +68,7 @@ def hit_blow():
         print("기회의 수는 1 이상이어야 합니다.")
         return
     config_dict = {"digit": digit, "color": color, "tryCount": try_count}
-    set_config(config_dict)
+    jc.set_config(config_path, config_dict)
     # 문제 생성
     task = (ct.create_task(color, digit))
     # 성공 여부
@@ -85,35 +101,12 @@ def hit_blow():
             print("숫자의 갯수가 올바르지 않습니다.")
     print("-" * board_count)
     if is_success:
-        print("성공")
+        print("축하드립니다. 정답입니다.")
     else:
-        print("실패")
+        print("아깝네요 ㅠ")
         print("정답은")
         print(task)
         print("입니다.")
-
-
-config_path = './config.json'
-
-
-def get_config():
-    with open(config_path, 'r') as f:
-        json_data = json.load(f)
-    digit = json_data['latestConfig']['digit']
-    color = json_data['latestConfig']['color']
-    try_count = json_data['latestConfig']['tryCount']
-    result = {'digit': digit, 'color': color, 'tryCount': try_count}
-    return result
-
-
-def set_config(config):
-    with open(config_path, 'r') as f:
-        json_data = json.load(f)
-    json_data['latestConfig']['digit'] = config['digit']
-    json_data['latestConfig']['color'] = config['color']
-    json_data['latestConfig']['tryCount'] = config['tryCount']
-    with open(config_path, 'w') as f:
-        json.dump(json_data, f, indent="\t")
 
 
 hit_blow()
