@@ -9,6 +9,7 @@
 # ex) [5, 4, 0, 1], [5, 3, 2, 1]    =>      {'hit': 2, 'blow': 0}
 # ex) [5, 3, 2, 1], [5, 3, 2, 1]    =>      {'hit': 4, 'blow': 0}
 def check_answer(user_data, task):
+    # 초기값 설정은 자유
     result = {"hit":0, "blow":0}
     # 코드 작성
     return result
