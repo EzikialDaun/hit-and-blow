@@ -20,4 +20,4 @@ if __name__ == "__main__":
     print(check_answer([0, 1, 2, 3], [5, 3, 2, 1]))
     print(check_answer([0, 5, 1, 4], [5, 3, 2, 1]))
     print(check_answer([5, 4, 0, 1], [5, 3, 2, 1]))
-    print(check_answer([5, 3, 2, 1], [5, 3, 2, 1]))
+    print(check_answer([5, 3, 2, 1, 3], [5, 3, 2, 1, 3]))

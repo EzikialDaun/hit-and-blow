@@ -12,3 +12,4 @@ def str_list_to_int_list(data):
 if __name__ == "__main__":
     print(str_list_to_int_list(["1", "2", "5", "4"]))
     print(str_list_to_int_list(["2", "1", "0", "3"]))
+    print(str_list_to_int_list(["7", "9", "3", "4", "6"]))
