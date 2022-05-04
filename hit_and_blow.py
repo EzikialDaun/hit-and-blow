@@ -53,22 +53,27 @@ class MainWindow(QMainWindow, form_class):
             QMessageBox.about(self, 'Success!', "Success! Restart Game.")
             self.init_game()
         else:
-            QMessageBox.about(self, 'Result', f"Hit: {str(result_dict['hit'])}, Blow: {str(result_dict['blow'])}, Try "
-                                              f"Count: {self.try_count}")
+            QMessageBox.about(self, 'Result', f"Hit: {str(result_dict['hit'])}, Blow: {str(result_dict['blow'])}")
             if self.try_count == 0:
                 temp_task = [i + 1 for i in self.task]
                 QMessageBox.about(self, 'Game Over', f"Game Over. Goal was {temp_task}. Restart Game.")
                 self.init_game()
+        self.render()
 
     def render(self):
         self.digit_0.setPixmap(QtGui.QPixmap(self.image_list[self.answer[0]]))
         self.digit_1.setPixmap(QtGui.QPixmap(self.image_list[self.answer[1]]))
         self.digit_2.setPixmap(QtGui.QPixmap(self.image_list[self.answer[2]]))
         self.digit_3.setPixmap(QtGui.QPixmap(self.image_list[self.answer[3]]))
-        base_pos_x = 110
-        interval_pos = 200
-        base_pos_y = 20
+        base_pos_x = 60
+        interval_pos = 150
+        base_pos_y = -10
         self.arrow_down.move(base_pos_x + (interval_pos * self.cursor), base_pos_y)
+        self.txt_try_count.setText(f"{self.try_count}")
+        if self.try_count <= 3:
+            self.txt_try_count.setStyleSheet("Color : red")
+        else:
+            self.txt_try_count.setStyleSheet("Color : black")
 
     def init_game(self):
         self.task = ct.create_task(self.max_number, self.digit)
