@@ -1,3 +1,4 @@
+import os
 import sys
 from PyQt5.QtCore import Qt
 from PyQt5 import QtGui
@@ -6,7 +7,14 @@ from PyQt5 import uic
 from origin import check_answer as ca
 from origin import create_task as ct
 
-form_class = uic.loadUiType("./hit_and_blow.ui")[0]
+
+def resource_path(relative_path):
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
+
+form = resource_path('./hit_and_blow.ui')
+form_class = uic.loadUiType(form)[0]
 
 
 class MainWindow(QMainWindow, form_class):
@@ -20,12 +28,12 @@ class MainWindow(QMainWindow, form_class):
         self.answer = []
         self.task = []
         self.cursor = 0
-        self.image_path = "./resource/image/"
+        self.image_path = './resource/image/'
         self.image_list = []
         for i in range(0, self.max_number):
             self.image_list.append(self.image_path + "spade_" + str((i + 1)) + ".png")
 
-        self.arrow_down.setPixmap(QtGui.QPixmap(self.image_path + "arrow_down.png"))
+        self.arrow_down.setPixmap(QtGui.QPixmap(resource_path(self.image_path + "arrow_down.png")))
         self.btn_try.clicked.connect(self.button_try_clicked)
         self.init_game()
 
@@ -61,10 +69,10 @@ class MainWindow(QMainWindow, form_class):
         self.render()
 
     def render(self):
-        self.digit_0.setPixmap(QtGui.QPixmap(self.image_list[self.answer[0]]))
-        self.digit_1.setPixmap(QtGui.QPixmap(self.image_list[self.answer[1]]))
-        self.digit_2.setPixmap(QtGui.QPixmap(self.image_list[self.answer[2]]))
-        self.digit_3.setPixmap(QtGui.QPixmap(self.image_list[self.answer[3]]))
+        self.digit_0.setPixmap(QtGui.QPixmap(resource_path(self.image_list[self.answer[0]])))
+        self.digit_1.setPixmap(QtGui.QPixmap(resource_path(self.image_list[self.answer[1]])))
+        self.digit_2.setPixmap(QtGui.QPixmap(resource_path(self.image_list[self.answer[2]])))
+        self.digit_3.setPixmap(QtGui.QPixmap(resource_path(self.image_list[self.answer[3]])))
         base_pos_x = 60
         interval_pos = 150
         base_pos_y = -10
