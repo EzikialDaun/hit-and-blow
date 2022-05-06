@@ -10,7 +10,7 @@
 # ex) [5, 3, 2, 1], [5, 3, 2, 1]    =>      {'hit': 4, 'blow': 0}
 def check_answer(user_data, task):
     # 초기값 설정은 자유
-    result = {"hit":0, "blow":0}
+    result = {"hit": 0, "blow": 0}
     # 코드 작성
     return result
 
@@ -20,4 +20,4 @@ if __name__ == "__main__":
     print(check_answer([0, 1, 2, 3], [5, 3, 2, 1]))
     print(check_answer([0, 5, 1, 4], [5, 3, 2, 1]))
     print(check_answer([5, 4, 0, 1], [5, 3, 2, 1]))
-    print(check_answer([5, 3, 2, 1, 3], [5, 3, 2, 1, 3]))
+    print(check_answer([5, 3, 2, 1, 8], [5, 3, 2, 1, 8]))
