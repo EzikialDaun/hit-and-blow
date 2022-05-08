@@ -10,23 +10,23 @@
 # ex) [5, 3, 2, 1], [5, 3, 2, 1]    =>      {'hit': 4, 'blow': 0}
 def check_answer(user_data, task):
     # 초기값 설정은 자유
-    result = {"hit":0, "blow":0}
+    result = {"hit": 0, "blow": 0}
     # 코드 작성
-    hit=0
-    blow=0
+    hit = 0
+    blow = 0
 
     for i in range(len(user_data)):
-       if task[i] == user_data[i]:
-           hit+=1
-       if task[i] != user_data[i] and task.count(user_data[i]):
-           blow+=1
-    result["hit"]=hit
-    result["blow"]=blow
+        if task[i] == user_data[i]:
+            hit += 1
+        if task[i] != user_data[i] and task.count(user_data[i]):
+            blow += 1
+    result["hit"] = hit
+    result["blow"] = blow
     return result
-    print(result)            
-     
-   
-  #  return result
+    print(result)
+
+    #  return result
+
 
 # 테스트
 if __name__ == "__main__":
