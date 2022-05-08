@@ -1,3 +1,6 @@
 
 *.pyc
 /config.json
+/.idea
+/*.spec
+/build
