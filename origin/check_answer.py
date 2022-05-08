@@ -9,7 +9,7 @@
 # ex) [5, 4, 0, 1], [5, 3, 2, 1]    =>      {'hit': 2, 'blow': 0}
 # ex) [5, 3, 2, 1], [5, 3, 2, 1]    =>      {'hit': 4, 'blow': 0}
 def check_answer(user_data, task):
-    result = {"hit":0, "blow":0}
+    result = {"hit": 0, "blow": 0}
     hit = 0
     blow = 0
     for i in range(0, len(task)):
@@ -17,6 +17,33 @@ def check_answer(user_data, task):
             hit += 1
         elif user_data[i] in task:
             blow += 1
-    result.update({"hit":hit})
-    result.update({"blow":blow})
+    result.update({"hit": hit})
+    result.update({"blow": blow})
     return result
+
+
+def check_answer_group(user_data, task):
+    result = {"hit": 0, "blow": 0, "shot": 0, "strike": 0}
+    hit = 0
+    blow = 0
+    shot = 0
+    strike = 0
+    for i in range(len(user_data)):
+        if user_data[i][0] == task[i][0] and user_data[i][1] == task[i][1]:
+            strike += 1
+        number_list = [i[1] for i in task]
+        if user_data[i][0] == task[i][0]:
+            shot += 1
+        if user_data[i][1] == task[i][1]:
+            hit += 1
+        elif user_data[i][1] in number_list:
+            blow += 1
+    result.update({"strike": strike})
+    result.update({"hit": hit})
+    result.update({"blow": blow})
+    result.update({"shot": shot})
+    return result
+
+
+if __name__ == "__main__":
+    print(check_answer_group([[0, 1], [1, 2], [0, 5], [2, 4]], [[0, 1], [0, 2], [2, 3], [0, 4]]))
