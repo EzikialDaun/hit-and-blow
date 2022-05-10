@@ -15,8 +15,6 @@ def resource_path(relative_path):
 
 form = resource_path('./hit_and_blow.ui')
 form_class = uic.loadUiType(form)[0]
-max_playing_card = 13
-symbol = ["spade", "heart", "diamond", "club"]
 
 
 class MainWindow(QMainWindow, form_class):
@@ -29,28 +27,36 @@ class MainWindow(QMainWindow, form_class):
         self.answer = []
         self.task = []
         self.cursor = 0
-        self.image_path = './resource/image/'
-        self.image_list = [["" for _ in range(max_playing_card)] for _ in range(len(symbol))]
         self.log = ""
         self.round = 0
         self.max_color = 0
         self.is_extra_deck = False
-        for i in range(len(symbol)):
-            for j in range(max_playing_card):
-                self.image_list[i][j] = f"{self.image_path}{symbol[i]}_{j + 1}.png"
+        self.max_playing_card = 13
+        self.symbol = ["spade", "heart", "diamond", "club"]
+        self.image_path = './resource/image/'
+        self.image_list = [["" for _ in range(self.max_playing_card)] for _ in range(len(self.symbol))]
+        for i in range(len(self.symbol)):
+            for j in range(self.max_playing_card):
+                self.image_list[i][j] = f"{self.image_path}{self.symbol[i]}_{j + 1}.png"
         self.arrow_down.setPixmap(QtGui.QPixmap(resource_path(self.image_path + "arrow_down.png")))
         self.btn_try.clicked.connect(self.button_try_clicked)
         self.btn_new_game.clicked.connect(self.button_new_game_clicked)
         self.init_game()
 
     def keyPressEvent(self, e):
+        # 'W', 방향키 위, 숫자 패드 8
+        # 카드 인덱스 증가
         if e.key() == Qt.Key_W or e.key() == Qt.Key_Up or e.key() == Qt.Key_8:
             self.answer[self.cursor][1] = (self.answer[self.cursor][1] + 1) % self.max_number
+        # 'A', 방향키 왼쪽, 숫자 패드 4
+        # 카드 커서 감소
         elif e.key() == Qt.Key_A or e.key() == Qt.Key_Left or e.key() == Qt.Key_4:
             if self.cursor == 0:
                 self.cursor = self.digit - 1
             else:
                 self.cursor -= 1
+        # 'S', 방향키 아래, 숫자 패드 2
+        # 카드 카드 인덱스 감소
         elif e.key() == Qt.Key_S or e.key() == Qt.Key_Down or e.key() == Qt.Key_2:
             if self.answer[self.cursor][1] == 0:
                 self.answer[self.cursor][1] = self.max_number - 1
@@ -62,7 +68,7 @@ class MainWindow(QMainWindow, form_class):
             self.button_try_clicked()
         elif e.key() == Qt.Key_F:
             self.answer[self.cursor][0] = (self.answer[self.cursor][0] + 1) % self.max_color
-        self.render()
+        self.render_ui()
 
     def write_log(self, content, title=""):
         if title == "":
@@ -84,24 +90,34 @@ class MainWindow(QMainWindow, form_class):
                 QMessageBox.about(self, 'Game Over', f"Game Over. Goal was {self.task}. Restart Game.")
                 self.init_game()
                 return
-        self.render()
+        self.render_ui()
         self.round += 1
 
     def button_new_game_clicked(self):
-        QMessageBox.about(self, 'New Game', "Config applied.")
-        self.init_game()
+        reply = QMessageBox.question(self, 'Warning',
+                                     'The progress of the current game will be reset. Do you want to continue?',
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            QMessageBox.about(self, 'New Game', "Config applied.")
+            self.init_game()
 
-    def render(self):
+    def render_ui(self):
+        # 현재 유저가 제시한 답안을 카드로 렌더링
         self.digit_0.setPixmap(QtGui.QPixmap(resource_path(self.image_list[self.answer[0][0]][self.answer[0][1]])))
         self.digit_1.setPixmap(QtGui.QPixmap(resource_path(self.image_list[self.answer[1][0]][self.answer[1][1]])))
         self.digit_2.setPixmap(QtGui.QPixmap(resource_path(self.image_list[self.answer[2][0]][self.answer[2][1]])))
         self.digit_3.setPixmap(QtGui.QPixmap(resource_path(self.image_list[self.answer[3][0]][self.answer[3][1]])))
+        # 현재 유저가 어떤 카드를 조작하는지 나타내는 커서 화살표
+        # 좌표 정보
         base_pos_x = 60
         interval_pos = 150
         base_pos_y = -10
         self.arrow_down.move(base_pos_x + (interval_pos * self.cursor), base_pos_y)
+        # 로그 표시
         self.txt_log.setText(self.log)
+        # 남은 기회 표시
         self.txt_try_count.setText(f"{self.try_count}")
+        # 남은 기회가 3회 이하면 빨간색 글씨로 강조
         if self.try_count <= 3:
             self.txt_try_count.setStyleSheet("Color : red")
         else:
@@ -120,7 +136,7 @@ class MainWindow(QMainWindow, form_class):
         self.cursor = 0
         self.round = 0
         self.log = ""
-        self.render()
+        self.render_ui()
 
 
 if __name__ == "__main__":

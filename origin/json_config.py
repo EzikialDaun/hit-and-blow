@@ -1,5 +1,6 @@
 import json
 
+
 def get_config(config_path):
     with open(config_path, 'r') as f:
         json_data = json.load(f)

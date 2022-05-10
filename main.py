@@ -4,20 +4,17 @@ from origin import str_list_to_int_list as slti
 from origin import is_list_validate as ilv
 from origin import check_answer as ca
 from origin import json_config as jc
-
-
-def print_board():
-    board_count = 80
-    print("-" * board_count)
+from origin import print_board as pb
 
 
 def hit_blow():
+    board_count = 80
     # 경계선 숫자
-    print_board()
+    pb.print_board(board_count)
     print("Project: Hit & Blow")
     print("Team: 탈3진")
     print("Authors: 금용호, 김민석, 박수민, 임민영")
-    print_board()
+    pb.print_board(board_count)
     # 자릿수(d)
     digit = 0
     # 색깔 수(c)
@@ -39,7 +36,7 @@ def hit_blow():
         print("자릿수: %d" % config["digit"])
         print("색깔의 수: %d" % config["color"])
         print("기회의 수: %d" % config["tryCount"])
-        print_board()
+        pb.print_board(board_count)
         answer = input("최근에 진행한 게임의 설정을 불러오시겠습니까? (y/n) ==> ")
         if answer == 'y' or answer == 'Y':
             digit = config["digit"]
@@ -51,7 +48,7 @@ def hit_blow():
         print("게임 설정 파일이 존재하지 않습니다. 새 설정 입력을 진행합니다.")
     # 파일이 없거나 직접 입력 모드이면 직접 입력
     if config == {} or is_direct:
-        print_board()
+        pb.print_board(board_count)
         digit = int(input("정답의 자릿수(정수, d)를 입력하세요. (d >= 1) ==> "))
         color = int(input("색깔의 수(정수, c)를 입력하세요. (c >= 1, c >= d) ==> "))
         try_count = int(input("시도 가능한 횟수(정수, t)를 입력하세요. (t >= 1) ==> "))
@@ -81,7 +78,7 @@ def hit_blow():
     # 횟수 안에 정답 맞추면 성공
     # 맞추지 못하면 실패
     for i in range(try_count):
-        print_board()
+        pb.print_board(board_count)
         print("남은 기회: %d" % (try_count - i))
         # 플레이어 입력
         answer = input("정수 %d개를 공백(space)으로 분리하여 입력하세요. (0 ~ %d) ==> " % (digit, color - 1))
@@ -103,7 +100,7 @@ def hit_blow():
                 print("값의 범위가 올바르지 않습니다.")
         else:
             print("숫자의 갯수가 올바르지 않습니다.")
-    print_board()
+    pb.print_board(board_count)
     if is_success:
         print("축하드립니다. 정답입니다.")
     else:
