@@ -31,23 +31,32 @@ class MainWindow(QMainWindow, form_class):
         self.round = 0
         self.max_color = 0
         self.is_extra_deck = False
-        self.max_playing_card = 13
-        self.symbol = ["spade", "heart", "diamond", "club"]
+        self.key_c = "color"
+        self.key_n = "number"
+        self.card_suit = ["spade", "heart", "diamond", "club"]
+        self.card_symbol = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
         self.image_path = './resource/image/'
-        self.image_list = [["" for _ in range(self.max_playing_card)] for _ in range(len(self.symbol))]
-        for i in range(len(self.symbol)):
-            for j in range(self.max_playing_card):
-                self.image_list[i][j] = f"{self.image_path}{self.symbol[i]}_{j + 1}.png"
+        self.image_list = [["" for _ in range(len(self.card_symbol))] for _ in range(len(self.card_suit))]
+        for suit in range(len(self.card_suit)):
+            for num in range(len(self.card_symbol)):
+                self.image_list[suit][num] = f"{self.image_path}{self.card_suit[suit]}_{num + 1}.png"
         self.arrow_down.setPixmap(QtGui.QPixmap(resource_path(self.image_path + "arrow_down.png")))
         self.btn_try.clicked.connect(self.button_try_clicked)
         self.btn_new_game.clicked.connect(self.button_new_game_clicked)
         self.init_game()
 
+    def reduce_answer(self, answer):
+        result = [
+            self.card_suit[answer[self.key_c][i]][0].upper() + self.card_symbol[answer[self.key_n][i]]
+            for i in range(self.digit)]
+        return result
+
     def keyPressEvent(self, e):
         # 'W', 방향키 위, 숫자 패드 8
         # 카드 인덱스 증가
         if e.key() == Qt.Key_W or e.key() == Qt.Key_Up or e.key() == Qt.Key_8:
-            self.answer[self.cursor][1] = (self.answer[self.cursor][1] + 1) % self.max_number
+            self.answer[self.key_n][self.cursor] = (self.answer[self.key_n][
+                                                        self.cursor] + 1) % self.max_number
         # 'A', 방향키 왼쪽, 숫자 패드 4
         # 카드 커서 감소
         elif e.key() == Qt.Key_A or e.key() == Qt.Key_Left or e.key() == Qt.Key_4:
@@ -58,16 +67,16 @@ class MainWindow(QMainWindow, form_class):
         # 'S', 방향키 아래, 숫자 패드 2
         # 카드 카드 인덱스 감소
         elif e.key() == Qt.Key_S or e.key() == Qt.Key_Down or e.key() == Qt.Key_2:
-            if self.answer[self.cursor][1] == 0:
-                self.answer[self.cursor][1] = self.max_number - 1
+            if self.answer[self.key_n][self.cursor] == 0:
+                self.answer[self.key_n][self.cursor] = self.max_number - 1
             else:
-                self.answer[self.cursor][1] -= 1
+                self.answer[self.key_n][self.cursor] -= 1
         elif e.key() == Qt.Key_D or e.key() == Qt.Key_Right or e.key() == Qt.Key_6:
             self.cursor = (self.cursor + 1) % self.digit
         elif e.key() == Qt.Key_Return or e.key() == Qt.Key_Enter:
             self.button_try_clicked()
         elif e.key() == Qt.Key_F:
-            self.answer[self.cursor][0] = (self.answer[self.cursor][0] + 1) % self.max_color
+            self.answer[self.key_c][self.cursor] = (self.answer[self.key_c][self.cursor] + 1) % self.max_color
         self.render_ui()
 
     def write_log(self, content, title=""):
@@ -78,20 +87,32 @@ class MainWindow(QMainWindow, form_class):
             self.log += f"[{title}] {content}\n"
 
     def button_try_clicked(self):
+        # 시도 가능 횟수 차감
         self.try_count -= 1
-        result_dict = ca.check_answer_group(self.answer, self.task)
-        if result_dict['strike'] == self.digit:
+        # 라운드 수 증가
+        self.round += 1
+        # 사용자의 답안과 문제를 비교
+        result_dict = ca.check_answer_dict(self.answer, self.task)
+        # 4 hit & 4 strike면 성공
+        if result_dict['hit'] == self.digit and result_dict['strike'] == self.digit:
             QMessageBox.about(self, 'Success!', "Success! Restart Game.")
             self.init_game()
             return
         else:
-            self.write_log(f"[round {self.round + 1}] {self.answer}: {result_dict}", "Result")
+            # 현재 라운드, 사용자가 어떤 답을 입력했는지, 비교 결과 등을 로그에 출력
+            self.write_log(
+                f"[round {self.round}] "
+                f"{self.reduce_answer(self.answer)} "
+                f"{result_dict}",
+                "Result")
+            # 시도 횟수가 없으면
             if self.try_count <= 0:
-                QMessageBox.about(self, 'Game Over', f"Game Over. Goal was {self.task}. Restart Game.")
+                # 게임 종료
+                QMessageBox.about(self, 'Game Over',
+                                  f"Game Over. Goal was {self.reduce_answer(self.task)}. Restart Game.")
                 self.init_game()
                 return
         self.render_ui()
-        self.round += 1
 
     def button_new_game_clicked(self):
         reply = QMessageBox.question(self, 'Warning',
@@ -103,10 +124,18 @@ class MainWindow(QMainWindow, form_class):
 
     def render_ui(self):
         # 현재 유저가 제시한 답안을 카드로 렌더링
-        self.digit_0.setPixmap(QtGui.QPixmap(resource_path(self.image_list[self.answer[0][0]][self.answer[0][1]])))
-        self.digit_1.setPixmap(QtGui.QPixmap(resource_path(self.image_list[self.answer[1][0]][self.answer[1][1]])))
-        self.digit_2.setPixmap(QtGui.QPixmap(resource_path(self.image_list[self.answer[2][0]][self.answer[2][1]])))
-        self.digit_3.setPixmap(QtGui.QPixmap(resource_path(self.image_list[self.answer[3][0]][self.answer[3][1]])))
+        self.digit_0.setPixmap(
+            QtGui.QPixmap(
+                resource_path(self.image_list[self.answer[self.key_c][0]][self.answer[self.key_n][0]])))
+        self.digit_1.setPixmap(
+            QtGui.QPixmap(
+                resource_path(self.image_list[self.answer[self.key_c][1]][self.answer[self.key_n][1]])))
+        self.digit_2.setPixmap(
+            QtGui.QPixmap(
+                resource_path(self.image_list[self.answer[self.key_c][2]][self.answer[self.key_n][2]])))
+        self.digit_3.setPixmap(
+            QtGui.QPixmap(
+                resource_path(self.image_list[self.answer[self.key_c][3]][self.answer[self.key_n][3]])))
         # 현재 유저가 어떤 카드를 조작하는지 나타내는 커서 화살표
         # 좌표 정보
         base_pos_x = 60
@@ -124,18 +153,27 @@ class MainWindow(QMainWindow, form_class):
             self.txt_try_count.setStyleSheet("Color : black")
 
     def init_game(self):
+        # 카드 확장(J, Q, K) 여부 설정
         self.is_extra_deck = self.chk_extra_deck.isChecked()
         if self.is_extra_deck:
             self.max_number = 13
         else:
             self.max_number = 10
+        # 카드 슈트(문양) 수 설정
         self.max_color = self.spin_max_color.value()
-        self.task = ct.create_task_group(self.max_number, self.digit, self.max_color)
+        # 시도 횟수 설정
         self.try_count = self.spin_max_try_count.value()
-        self.answer = [[0, i] for i in range(self.digit)]
+        # 문제 출제
+        self.task = ct.create_task_dict(self.max_number, self.digit, self.max_color)
+        # 답안 초기화
+        self.answer = {self.key_c: [0 for _ in range(self.digit)], self.key_n: [i for i in range(self.digit)]}
+        # 커서 초기화
         self.cursor = 0
+        # 라운드 수 초기화
         self.round = 0
+        # 로그 초기화
         self.log = ""
+        # 렌더링
         self.render_ui()
 
 

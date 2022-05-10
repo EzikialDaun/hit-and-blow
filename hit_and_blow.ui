@@ -115,7 +115,7 @@
    <property name="geometry">
     <rect>
      <x>500</x>
-     <y>245</y>
+     <y>235</y>
      <width>100</width>
      <height>60</height>
     </rect>
@@ -173,7 +173,7 @@
    <property name="geometry">
     <rect>
      <x>380</x>
-     <y>260</y>
+     <y>250</y>
      <width>80</width>
      <height>25</height>
     </rect>
@@ -194,7 +194,7 @@
    <property name="geometry">
     <rect>
      <x>460</x>
-     <y>260</y>
+     <y>250</y>
      <width>30</width>
      <height>25</height>
     </rect>
@@ -216,9 +216,15 @@
     <rect>
      <x>50</x>
      <y>330</y>
-     <width>350</width>
+     <width>400</width>
      <height>160</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="cursor" stdset="0">
     <cursorShape>ArrowCursor</cursorShape>
@@ -233,11 +239,17 @@
   <widget class="QTextBrowser" name="textBrowser">
    <property name="geometry">
     <rect>
-     <x>420</x>
+     <x>499</x>
      <y>330</y>
-     <width>180</width>
+     <width>100</width>
      <height>160</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="focusPolicy">
     <enum>Qt::ClickFocus</enum>
@@ -381,7 +393,7 @@
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>260</y>
+     <y>250</y>
      <width>130</width>
      <height>10</height>
     </rect>
@@ -393,14 +405,14 @@
     </font>
    </property>
    <property name="text">
-    <string>Hit: Number + Position</string>
+    <string>Hit: number + position</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_10">
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>275</y>
+     <y>265</y>
      <width>130</width>
      <height>10</height>
     </rect>
@@ -412,33 +424,14 @@
     </font>
    </property>
    <property name="text">
-    <string>Blow: Number Only</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_11">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>245</y>
-     <width>200</width>
-     <height>10</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>7</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Strike: Number + Position + Color</string>
+    <string>Blow: number Only</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_12">
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>290</y>
+     <y>280</y>
      <width>130</width>
      <height>10</height>
     </rect>
@@ -450,14 +443,14 @@
     </font>
    </property>
    <property name="text">
-    <string>Shot: Color + Position</string>
+    <string>Strike: color + position</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_13">
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>305</y>
+     <y>295</y>
      <width>220</width>
      <height>10</height>
     </rect>

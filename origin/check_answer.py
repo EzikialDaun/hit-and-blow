@@ -31,13 +31,14 @@ def check_answer_group(user_data, task):
     for i in range(len(user_data)):
         if user_data[i][0] == task[i][0] and user_data[i][1] == task[i][1]:
             strike += 1
-        number_list = [i[1] for i in task]
-        if user_data[i][0] == task[i][0]:
-            shot += 1
-        if user_data[i][1] == task[i][1]:
-            hit += 1
-        elif user_data[i][1] in number_list:
-            blow += 1
+        else:
+            number_list = [i[1] for i in task]
+            if user_data[i][0] == task[i][0]:
+                shot += 1
+            if user_data[i][1] == task[i][1]:
+                hit += 1
+            elif user_data[i][1] in number_list:
+                blow += 1
     result.update({"strike": strike})
     result.update({"hit": hit})
     result.update({"blow": blow})
@@ -45,5 +46,25 @@ def check_answer_group(user_data, task):
     return result
 
 
+def check_answer_dict(user_data, task, color_key="color", number_key="number"):
+    result = {"hit": 0, "blow": 0, "strike": 0}
+    hit = 0
+    blow = 0
+    strike = 0
+    for i in range(len(user_data[number_key])):
+        if user_data[number_key][i] == task[number_key][i]:
+            hit += 1
+        elif user_data[number_key][i] in task[number_key]:
+            blow += 1
+        if user_data[color_key][i] == task[color_key][i]:
+            strike += 1
+    result.update({"hit": hit})
+    result.update({"blow": blow})
+    result.update({"strike": strike})
+    return result
+
+
 if __name__ == "__main__":
-    print(check_answer_group([[0, 1], [1, 2], [0, 5], [2, 4]], [[0, 1], [0, 2], [2, 3], [0, 4]]))
+    print(check_answer_group([[0, 1], [1, 2], [0, 5], [2, 4]], [[0, 1], [0, 3], [0, 2], [0, 4]]))
+    print(check_answer_dict({"color": [0, 1, 0, 2], "number": [1, 2, 5, 4]},
+                            {"color": [0, 0, 0, 0], "number": [1, 3, 2, 4]}))
