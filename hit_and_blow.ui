@@ -393,76 +393,38 @@
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>250</y>
-     <width>130</width>
-     <height>10</height>
+     <y>265</y>
+     <width>180</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Arial</family>
-     <pointsize>7</pointsize>
+     <pointsize>9</pointsize>
     </font>
    </property>
    <property name="text">
-    <string>Hit: number + position</string>
+    <string>Hit: number + position + color</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_10">
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>265</y>
-     <width>130</width>
-     <height>10</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>7</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Blow: number Only</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_12">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>280</y>
-     <width>130</width>
-     <height>10</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>7</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Strike: color + position</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_13">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>295</y>
+     <y>290</y>
      <width>220</width>
-     <height>10</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Arial</family>
-     <pointsize>7</pointsize>
+     <pointsize>9</pointsize>
     </font>
    </property>
    <property name="text">
-    <string>* There may be several cards of the same pattern.</string>
+    <string>Blow: number only or number + position</string>
    </property>
   </widget>
  </widget>

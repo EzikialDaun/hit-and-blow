@@ -47,20 +47,16 @@ def check_answer_group(user_data, task):
 
 
 def check_answer_dict(user_data, task, color_key="color", number_key="number"):
-    result = {"hit": 0, "blow": 0, "strike": 0}
+    result = {"hit": 0, "blow": 0}
     hit = 0
     blow = 0
-    strike = 0
     for i in range(len(user_data[number_key])):
-        if user_data[number_key][i] == task[number_key][i]:
+        if user_data[number_key][i] == task[number_key][i] and user_data[color_key][i] == task[color_key][i]:
             hit += 1
         elif user_data[number_key][i] in task[number_key]:
             blow += 1
-        if user_data[color_key][i] == task[color_key][i]:
-            strike += 1
     result.update({"hit": hit})
     result.update({"blow": blow})
-    result.update({"strike": strike})
     return result
 
 
