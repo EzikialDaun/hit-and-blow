@@ -21,7 +21,9 @@ def create_task_group(color, position, group):
     return result
 
 
-def create_task_dict(num, position, color, color_key="color", number_key="number"):
+def create_task_dict(num, position, color, color_key="c", number_key="n"):
+    if position > num:
+        return {}
     temp = [i for i in range(0, num)]
     random.shuffle(temp)
     color_list = [random.randrange(0, color) for _ in range(position)]
@@ -31,5 +33,8 @@ def create_task_dict(num, position, color, color_key="color", number_key="number
 
 
 if __name__ == "__main__":
-    print(create_task_group(13, 4, 4))
     print(create_task_dict(13, 4, 4))
+    print(create_task_dict(13, 4, 4, "c", "n"))
+    print(create_task_dict(10, 4, 1))
+    print(create_task_dict(4, 5, 1))
+    print(create_task_dict(13, 6, 4, "c", "n"))

@@ -46,7 +46,7 @@ def check_answer_group(user_data, task):
     return result
 
 
-def check_answer_dict(user_data, task, color_key="color", number_key="number"):
+def check_answer_dict(user_data, task, color_key="c", number_key="n"):
     result = {"hit": 0, "blow": 0}
     hit = 0
     blow = 0
@@ -62,5 +62,5 @@ def check_answer_dict(user_data, task, color_key="color", number_key="number"):
 
 if __name__ == "__main__":
     print(check_answer_group([[0, 1], [1, 2], [0, 5], [2, 4]], [[0, 1], [0, 3], [0, 2], [0, 4]]))
-    print(check_answer_dict({"color": [0, 1, 0, 2], "number": [1, 2, 5, 4]},
-                            {"color": [0, 0, 0, 0], "number": [1, 3, 2, 4]}))
+    print(check_answer_dict({"c": [0, 1, 0, 2], "n": [1, 2, 5, 4]}, {"c": [0, 0, 0, 0], "n": [1, 3, 2, 4]}))
+    print(check_answer_dict({"c": [0, 0, 0, 2], "n": [1, 2, 4, 4]}, {"c": [0, 0, 0, 0], "n": [1, 2, 3, 4]}))

@@ -7,8 +7,8 @@ class HitBlowManager:
         self.digit = 0
         self.max_color = 0
         self.task = []
-        self.key_color = "color"
-        self.key_number = "number"
+        self.key_color = "c"
+        self.key_number = "n"
 
     def init_game(self, number, digit, color):
         self.max_number = number
@@ -34,6 +34,8 @@ class HitBlowManager:
         return result
 
     def create_task(self):
+        if self.digit > self.max_number:
+            return {}
         temp = [i for i in range(0, self.max_number)]
         random.shuffle(temp)
         color_list = [random.randrange(0, self.max_color) for _ in range(self.digit)]
