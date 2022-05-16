@@ -20,3 +20,18 @@ def set_config(config_path, config):
     with open(config_path, 'w') as f:
         json.dump(json_data, f, indent="\t")
     f.close()
+
+
+def set_playlist_config(config_path, playlist):
+    json_data = {'latestPlaylist': playlist}
+    with open(config_path, 'w') as f:
+        json.dump(json_data, f, indent="\t")
+    f.close()
+
+
+def get_playlist_config(config_path):
+    with open(config_path, 'r') as f:
+        json_data = json.load(f)
+    result = json_data['latestPlaylist']
+    f.close()
+    return result
