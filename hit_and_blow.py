@@ -1,8 +1,10 @@
 import json
 import os
 import sys
+
+import PyQt5
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from origin import hit_blow_manager as hbm
@@ -17,6 +19,12 @@ def resource_path(relative_path):
     base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
     return os.path.join(base_path, relative_path)
 
+
+if hasattr(QtCore.Qt, 'AA_EnableHighDpiScaling'):
+    PyQt5.QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+
+if hasattr(QtCore.Qt, 'AA_UseHighDpiPixmaps'):
+    PyQt5.QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 
 # UI 파일 로드
 form = resource_path('./hit_and_blow.ui')
@@ -57,6 +65,9 @@ class MainWindow(QMainWindow, form_class):
         self.btn_prev.clicked.connect(self.btn_prev_clicked)
         self.btn_next.clicked.connect(self.btn_next_clicked)
         self.btn_clear.clicked.connect(self.btn_clear_clicked)
+        self.btn_pause.clicked.connect(self.btn_pause_clicked)
+        self.btn_resume.clicked.connect(self.btn_resume_clicked)
+        self.btn_stop.clicked.connect(self.btn_stop_clicked)
         self.slider_volume.valueChanged.connect(self.slider_volume_changed)
         self.chk_continuous.stateChanged.connect(self.chk_continuous_changed)
         self.chk_shuffle.stateChanged.connect(self.chk_shuffle_changed)
@@ -142,11 +153,41 @@ class MainWindow(QMainWindow, form_class):
         volume = float(self.slider_volume.value() / 100)
         self.sound_player.set_volume(volume)
 
+    def btn_play_clicked(self):
+        self.sound_player.play()
+        self.btn_play.hide()
+        self.btn_pause.show()
+        self.btn_resume.hide()
+
+    def btn_pause_clicked(self):
+        self.sound_player.pause()
+        self.btn_play.hide()
+        self.btn_pause.hide()
+        self.btn_resume.show()
+
+    def btn_resume_clicked(self):
+        self.sound_player.unpause()
+        self.btn_play.hide()
+        self.btn_pause.show()
+        self.btn_resume.hide()
+
+    def btn_stop_clicked(self):
+        self.sound_player.stop()
+        self.btn_play.show()
+        self.btn_pause.hide()
+        self.btn_resume.hide()
+
     def btn_prev_clicked(self):
         self.sound_player.prev_song()
+        self.btn_play.hide()
+        self.btn_pause.show()
+        self.btn_resume.hide()
 
     def btn_next_clicked(self):
         self.sound_player.next_song()
+        self.btn_play.hide()
+        self.btn_pause.show()
+        self.btn_resume.hide()
 
     def btn_clear_clicked(self):
         reply = QMessageBox.question(self, 'Warning',
@@ -155,6 +196,9 @@ class MainWindow(QMainWindow, form_class):
         if reply == QMessageBox.Yes:
             self.sound_player.init_playlist()
             jc.set_playlist_config("./hb_config.json", self.sound_player.playlist)
+            self.btn_play.show()
+            self.btn_pause.hide()
+            self.btn_resume.hide()
 
     def chk_continuous_changed(self, state):
         result = False
@@ -214,11 +258,8 @@ class MainWindow(QMainWindow, form_class):
             QMessageBox.about(self, 'New Game', "Config applied.")
             self.init_game()
 
-    def btn_play_clicked(self):
-        self.sound_player.play()
-
     def btn_browse_clicked(self):
-        path_list = QtWidgets.QFileDialog.getOpenFileNames(self, "Select Music File", ".", "wav(*.wav)")[0]
+        path_list = QtWidgets.QFileDialog.getOpenFileNames(self, "Select Music File", ".", "wav(*.wav);;mp3(*.mp3)")[0]
         for music_path in path_list:
             self.sound_player.add_playlist(music_path)
         jc.set_playlist_config("./hb_config.json", self.sound_player.playlist)

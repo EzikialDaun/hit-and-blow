@@ -1,4 +1,4 @@
-import pygame
+import pygame.mixer
 import random
 
 
@@ -14,7 +14,7 @@ def minimize_file_name(file_name, has_extension=False, separator="/"):
 
 class SoundPlayer:
     def __init__(self):
-        pygame.init()
+        pygame.mixer.init()
         # 원본 플레이리스트
         # 셔플 모드 여부와 상관없이 순서 유지
         self.playlist = []
@@ -84,6 +84,7 @@ class SoundPlayer:
             # 재생용 리스트의 커서 인덱스에 해당하는 파일을 재생곡으로 지정
             self.current_song = self.temp_list[self.cursor]
             try:
+                pygame.mixer.music.unpause()
                 # 현재 재생곡을 로드
                 pygame.mixer.music.load(self.current_song)
                 # 로드된 파일을 재생

@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>Dialog</class>
  <widget class="QDialog" name="Dialog">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -467,7 +470,7 @@
   <widget class="QPushButton" name="btn_play">
    <property name="geometry">
     <rect>
-     <x>735</x>
+     <x>710</x>
      <y>370</y>
      <width>50</width>
      <height>30</height>
@@ -478,6 +481,9 @@
    </property>
    <property name="text">
     <string>Play</string>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_next">
@@ -645,6 +651,98 @@
     <string>Clear</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="btn_pause">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>370</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Pause</string>
+   </property>
+   <property name="text">
+    <string>Pause</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_stop">
+   <property name="geometry">
+    <rect>
+     <x>760</x>
+     <y>370</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Play</string>
+   </property>
+   <property name="text">
+    <string>Stop</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_resume">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>370</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>8</pointsize>
+    </font>
+   </property>
+   <property name="toolTip">
+    <string>Resume</string>
+   </property>
+   <property name="text">
+    <string>Resume</string>
+   </property>
+  </widget>
+  <zorder>btn_resume</zorder>
+  <zorder>btn_pause</zorder>
+  <zorder>digit_0</zorder>
+  <zorder>digit_1</zorder>
+  <zorder>digit_2</zorder>
+  <zorder>digit_3</zorder>
+  <zorder>arrow_down</zorder>
+  <zorder>btn_try</zorder>
+  <zorder>label</zorder>
+  <zorder>label_2</zorder>
+  <zorder>label_3</zorder>
+  <zorder>label_4</zorder>
+  <zorder>txt_try_count</zorder>
+  <zorder>txt_log</zorder>
+  <zorder>textBrowser</zorder>
+  <zorder>spin_max_try_count</zorder>
+  <zorder>btn_new_game</zorder>
+  <zorder>label_5</zorder>
+  <zorder>label_6</zorder>
+  <zorder>spin_max_color</zorder>
+  <zorder>chk_extra_deck</zorder>
+  <zorder>label_7</zorder>
+  <zorder>label_8</zorder>
+  <zorder>label_9</zorder>
+  <zorder>label_10</zorder>
+  <zorder>txt_playlist</zorder>
+  <zorder>btn_play</zorder>
+  <zorder>btn_next</zorder>
+  <zorder>chk_continuous</zorder>
+  <zorder>chk_shuffle</zorder>
+  <zorder>btn_browse</zorder>
+  <zorder>btn_prev</zorder>
+  <zorder>line</zorder>
+  <zorder>txt_current_song</zorder>
+  <zorder>slider_volume</zorder>
+  <zorder>label_11</zorder>
+  <zorder>btn_clear</zorder>
+  <zorder>btn_stop</zorder>
  </widget>
  <resources/>
  <connections/>

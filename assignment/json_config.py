@@ -36,6 +36,7 @@ def set_config(config_path, config):
 # 함수의 끝에서 파일 닫는 것을 잊지 말자.
 def get_config(config_path):
     # 코드 작성
+    return ""
 
 
 if __name__ == "__main__":
