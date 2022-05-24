@@ -5,6 +5,7 @@ import sys
 import PyQt5
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5 import QtGui, QtWidgets, QtCore
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from origin import hit_blow_manager as hbm
@@ -15,9 +16,22 @@ from origin import json_config as jc
 # 배포 시 리소스 참조 오류 방지하기 위한 함수
 # 상대경로를 입력받아서
 # 절대경로를 리턴하는 함수
+# https://devbruce.github.io/python/py-39-path+function/
+# hit_and_blow.ui => 'C:\\KMS\\인하대\\1학년\\1학기\\컴퓨터공학기초\\텀프\\튜토리얼\\hit-and-blow\\hit_and_blow.ui'
 def resource_path(relative_path):
+    # __file__                  =>  현재 실행중인 파일이 속한 디렉토리 리턴
+    # os.path.abspath(__file__) =>  현재 실행중인 파일의 절대경로 리턴(어느 위치에서 실행해도 같은 값 리턴)
+    # os.path.dirname(path)     =>  path의 상위 디렉토리까지 잘라서 리턴
+    # py로 실행 시의 base_path    =>  C:\KMS\인하대\1학년\1학기\컴퓨터공학기초\텀프\튜토리얼\hit-and-blow (실행환경마다 다름)
+    # exe로 실행 시의 base_path   =>  C:\Users\eziki\AppData\Local\Temp\_MEI18642 (실행환경마다 다름)
+    # os.path.join(a, b)        =>  경로 합치기 => a/b
+
+    # sys 객체의 _MEIPASS 속성을 base_path에 저장.
+    # 만약 _MEIPASS 속성이 없으면 현재 실행중인 파일의 상위 디렉토리까지의 절대경로를 저장
     base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(base_path, relative_path)
+    # 위에서 만든 상위 디렉토리까지의 절대경로와 입력받은 상대경로를 결합
+    result = os.path.join(base_path, relative_path)
+    return result
 
 
 if hasattr(QtCore.Qt, 'AA_EnableHighDpiScaling'):
@@ -27,7 +41,7 @@ if hasattr(QtCore.Qt, 'AA_UseHighDpiPixmaps'):
     PyQt5.QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 
 # UI 파일 로드
-form = resource_path('./hit_and_blow.ui')
+form = resource_path('hit_and_blow.ui')
 form_class = uic.loadUiType(form)[0]
 
 
@@ -50,13 +64,15 @@ class MainWindow(QMainWindow, form_class):
         # 카드 파일 자동화를 위한 변수들
         self.card_suit = ["spade", "heart", "diamond", "club"]
         self.card_symbol = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-        image_path = './resource/image/'
+        image_path = 'resource/image/'
         self.image_list = [["" for _ in range(len(self.card_symbol))] for _ in range(len(self.card_suit))]
         for suit in range(len(self.card_suit)):
             for num in range(len(self.card_symbol)):
                 self.image_list[suit][num] = f"{image_path}{self.card_suit[suit]}_{num + 1}.png"
         # 카드 커서 이미지 지정
         self.arrow_down.setPixmap(QtGui.QPixmap(resource_path(f"{image_path}arrow_down.png")))
+        # 아이콘 이미지
+        self.setWindowIcon(QIcon(resource_path(f"{image_path}/icon.png")))
         # 위젯 이벤트 연결
         self.btn_try.clicked.connect(self.btn_try_clicked)
         self.btn_new_game.clicked.connect(self.btn_new_game_clicked)
@@ -78,7 +94,7 @@ class MainWindow(QMainWindow, form_class):
         # 사운드 플레이어 초기화
         self.sound_player = sp.SoundPlayer()
         try:
-            latest_playlist = jc.get_playlist_config("./hb_config.json")
+            latest_playlist = jc.get_playlist_config("hb_config.json")
         except FileNotFoundError:
             latest_playlist = []
         except json.decoder.JSONDecodeError:
@@ -195,7 +211,7 @@ class MainWindow(QMainWindow, form_class):
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
             self.sound_player.init_playlist()
-            jc.set_playlist_config("./hb_config.json", self.sound_player.playlist)
+            jc.set_playlist_config("hb_config.json", self.sound_player.playlist)
             self.btn_play.show()
             self.btn_pause.hide()
             self.btn_resume.hide()
@@ -262,7 +278,7 @@ class MainWindow(QMainWindow, form_class):
         path_list = QtWidgets.QFileDialog.getOpenFileNames(self, "Select Music File", ".", "wav(*.wav);;mp3(*.mp3)")[0]
         for music_path in path_list:
             self.sound_player.add_playlist(music_path)
-        jc.set_playlist_config("./hb_config.json", self.sound_player.playlist)
+        jc.set_playlist_config("hb_config.json", self.sound_player.playlist)
         self.render_ui()
 
     # 렌더링 함수
