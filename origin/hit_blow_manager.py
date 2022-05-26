@@ -3,20 +3,20 @@ import random
 
 class HitBlowManager:
     def __init__(self):
-        self.max_number = 0
-        self.digit = 0
-        self.max_color = 0
-        self.task = []
-        self.key_color = "c"
-        self.key_number = "n"
+        self.max_number: int = 0
+        self.digit: int = 0
+        self.max_color: int = 0
+        self.task: dict[str, list[int]] = {}
+        self.key_color: str = "c"
+        self.key_number: str = "n"
 
-    def init_game(self, number, digit, color):
+    def init_game(self, number: int, digit: int, color: int):
         self.max_number = number
         self.digit = digit
         self.max_color = color
         self.task = self.create_task()
 
-    def check_answer(self, user_data):
+    def check_answer(self, user_data: dict[str, list[int]]) -> dict[str, int]:
         result = {"hit": 0, "blow": 0}
         hit = 0
         blow = 0
@@ -33,7 +33,7 @@ class HitBlowManager:
         result.update({"blow": blow})
         return result
 
-    def create_task(self):
+    def create_task(self) -> dict[str, list[int]]:
         if self.digit > self.max_number:
             return {}
         temp = [i for i in range(0, self.max_number)]

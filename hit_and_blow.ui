@@ -511,6 +511,9 @@
      <height>30</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>If you check it, the playlist won't stop playing</string>
+   </property>
    <property name="text">
     <string>Continuous</string>
    </property>
@@ -523,6 +526,9 @@
      <width>60</width>
      <height>30</height>
     </rect>
+   </property>
+   <property name="toolTip">
+    <string>If you check it and play the playlist, the song will shuffle</string>
    </property>
    <property name="text">
     <string>Shuffle</string>
@@ -616,7 +622,7 @@
     <number>5</number>
    </property>
    <property name="value">
-    <number>10</number>
+    <number>50</number>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -645,7 +651,7 @@
     </rect>
    </property>
    <property name="toolTip">
-    <string>Browse music file</string>
+    <string>Clear the playlist</string>
    </property>
    <property name="text">
     <string>Clear</string>

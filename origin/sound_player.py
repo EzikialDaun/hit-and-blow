@@ -17,76 +17,74 @@ class SoundPlayer:
         pygame.mixer.init()
         # 원본 플레이리스트
         # 셔플 모드 여부와 상관없이 순서 유지
-        self.playlist = []
+        self.__playlist: list[str] = []
         # 실제 재생용 플레이 리스트(원본 플레이리스트의 사본)
         # 셔플 모드에 의해 순서 임의로 바뀔 수 있음
         # 실제 재생은 이 리스트 참조
-        self.temp_list = []
+        self.__temp_list: list[str] = []
         # 현재 재생 곡 정보(이름)
-        self.current_song = ""
+        self.__current_song: str = ""
         # 반복 재생 모드 플래그
         # True: 곡 재생이 모두 끝나면 계속해서 다시 곡을 재생
-        self.is_continuous = False
+        self.__is_continuous: bool = False
         # 곡 셔플 모드 플래그
         # True: 재생용 플레이리스트를 랜덤으로 셔플
-        self.is_shuffle = False
+        self.__is_shuffle: bool = False
         # 본 플레이리스트의 활성화 상태 여부를 나타냄
-        self.is_active = False
+        self.__is_active: bool = False
         # 본 플레이리스트의 곡 재생 여부를 나타냄
-        self.is_busy = False
+        self.__is_busy: bool = False
         # 곡 재생 인덱싱용 커서
-        self.cursor = 0
-        init_volume = 0.1
+        self.__cursor: int = 0
         # 곡 볼륨
-        self.volume = init_volume
-        pygame.mixer.music.set_volume(self.volume)
+        self.__volume: float = 0.5
         # 페이드아웃 소요 시간
-        self.fadeout_wait = 1000
+        self.__fadeout_wait: int = 1000
 
     # 플레이리스트 전체 초기화
     def init_playlist(self):
-        pygame.mixer.music.fadeout(self.fadeout_wait)
-        self.playlist = []
-        self.temp_list = []
-        self.current_song = ""
-        self.is_active = False
-        self.is_busy = False
-        self.cursor = 0
+        pygame.mixer.music.fadeout(self.__fadeout_wait)
+        self.__playlist = []
+        self.__temp_list = []
+        self.__current_song = ""
+        self.__is_active = False
+        self.__is_busy = False
+        self.__cursor = 0
 
     # 플레이리스트 부분 초기화
     # 커서 원점 복귀
     # 원본 플레이리스트로부터 실제 재생용 플레이리스트 복사
     # 셔플 옵션 활성화 시 재생용 플레이리스트 셔플
     def playlist_copy(self):
-        self.cursor = 0
-        self.temp_list = self.playlist.copy()
-        if self.is_shuffle:
-            random.shuffle(self.temp_list)
+        self.__cursor = 0
+        self.__temp_list = self.__playlist.copy()
+        if self.__is_shuffle:
+            random.shuffle(self.__temp_list)
 
     # 비활성화와 곡 정보 초기화를 같이 진행하는 함수
     # 재생이 완전히 멈췄을 경우 사용
     def deactivate_playlist(self):
-        self.is_active = False
-        self.current_song = ""
+        self.__is_active = False
+        self.__current_song = ""
 
     # 음악 파일이 있는 절대경로를 입력받아
     # 플레이리스트에 추가하는 함수
     def add_playlist(self, abs_path):
         # 파일이 이미 플레이리스트에 하면 추가하지 않음
-        if abs_path not in self.playlist:
-            self.playlist.append(abs_path)
-            self.temp_list.append(abs_path)
+        if abs_path not in self.__playlist:
+            self.__playlist.append(abs_path)
+            self.__temp_list.append(abs_path)
 
     # 파일 로드하고 재생하는 함수
     def load_and_play(self):
         # 재생용 리스트의 길이가 0보다 클 때
-        if len(self.temp_list) > 0:
+        if len(self.__temp_list) > 0:
             # 재생용 리스트의 커서 인덱스에 해당하는 파일을 재생곡으로 지정
-            self.current_song = self.temp_list[self.cursor]
+            self.__current_song = self.__temp_list[self.__cursor]
             try:
                 pygame.mixer.music.unpause()
                 # 현재 재생곡을 로드
-                pygame.mixer.music.load(self.current_song)
+                pygame.mixer.music.load(self.__current_song)
                 # 로드된 파일을 재생
                 pygame.mixer.music.play()
             # 파일이 경로에 없을 때
@@ -98,15 +96,15 @@ class SoundPlayer:
     # 플레이리스트 시작 메서드
     def play(self):
         # 기존 곡 페이드아웃
-        pygame.mixer.music.fadeout(self.fadeout_wait)
+        pygame.mixer.music.fadeout(self.__fadeout_wait)
         # 원본 플레이리스트의 길이가 0보다 크면
-        if len(self.playlist) > 0:
+        if len(self.__playlist) > 0:
             # 재생용 플레이리스트 만들기
             self.playlist_copy()
             # 재생 시작
             self.load_and_play()
             # 플레이리스트 활성화
-            self.is_active = True
+            self.__is_active = True
         # 원본 플레이리스트의 길이가 0 이하이면
         else:
             self.deactivate_playlist()
@@ -114,19 +112,19 @@ class SoundPlayer:
     # 다음 곡 재생
     def queue_song(self):
         # 재생용 리스트의 길이 구하기
-        len_temp_list = len(self.temp_list)
+        len_temp_list = len(self.__temp_list)
         # 재생용 리스트의 길이가 0보다 크면
         if len_temp_list > 0:
             # 커서 증가
-            self.cursor += 1
+            self.__cursor += 1
             # 증가한 커서가 리스트의 길이를 초과하지 않는다면
             # (인덱싱 범위를 벗어나지 않는, 보통의 경우)
-            if self.cursor < len_temp_list:
+            if self.__cursor < len_temp_list:
                 # 로드, 재생
                 self.load_and_play()
             # 증가한 커서가 리스트의 길이 이상일 경우, 그리고 반복 재생 옵션이 활성화인 경우
             # (인덱싱 범위를 벗어나는, 곡을 전부 재생한 경우)
-            elif self.cursor >= len_temp_list and self.is_continuous:
+            elif self.__cursor >= len_temp_list and self.is_continuous:
                 # 플레이리스트 부분 초기화
                 self.playlist_copy()
                 # 로드, 재생
@@ -142,47 +140,47 @@ class SoundPlayer:
     # 이전 곡으로 커서 옮기는 함수
     def prev_song(self):
         # 현재 곡 페이드아웃
-        pygame.mixer.music.fadeout(self.fadeout_wait)
+        pygame.mixer.music.fadeout(self.__fadeout_wait)
         # 비활성 상태 상태에서 해당 함수를 동작시키는 경우를 고려하여
         # 플레이리스트 활성화
-        self.is_active = True
+        self.__is_active = True
         # 커서가 0이면 맨 끝 파일로 커서 옮김
-        if self.cursor <= 0:
-            self.cursor = len(self.temp_list) - 1
+        if self.__cursor <= 0:
+            self.__cursor = len(self.__temp_list) - 1
         # 보통의 경우에는 커서 1 감소
         else:
-            self.cursor -= 1
+            self.__cursor -= 1
         # 로드, 재생
         self.load_and_play()
 
     # 다음 곡으로 커서 옮기는 함수
     def next_song(self):
         # 현재 곡 페이드아웃
-        pygame.mixer.music.fadeout(self.fadeout_wait)
+        pygame.mixer.music.fadeout(self.__fadeout_wait)
         # 비활성 상태 상태에서 해당 함수를 동작시키는 경우를 고려하여
         # 플레이리스트 활성화
-        self.is_active = True
+        self.__is_active = True
         # 현재 커서가 리스트의 끝일 경우
-        if self.cursor >= len(self.temp_list) - 1:
+        if self.__cursor >= len(self.__temp_list) - 1:
             # 처음 곡으로 커서 옮김
-            self.cursor = 0
+            self.__cursor = 0
         # 보통의 경우에는 커서 1 증가
         else:
-            self.cursor += 1
+            self.__cursor += 1
         # 로드, 재생
         self.load_and_play()
 
     # 일시정지
     def pause(self):
         # 플레이리스트 비활성화
-        self.is_active = False
+        self.__is_active = False
         # 곡 일시정지
         pygame.mixer.music.pause()
 
     # 곡 재개
     def unpause(self):
         # 플레이리스트 활성화
-        self.is_active = True
+        self.__is_active = True
         # 곡 재개
         pygame.mixer.music.unpause()
 
@@ -192,13 +190,49 @@ class SoundPlayer:
         # 곡 정지
         pygame.mixer.music.stop()
 
-    # 현재 재생 모듈이 곡을 재생 중인지 확인하는 함수
-    def get_busy(self):
-        self.is_busy = pygame.mixer.music.get_busy()
-        return self.is_busy
+    @property
+    def playlist(self):
+        return self.__playlist
 
-    # 볼륨 설정 함수
+    @property
+    def is_continuous(self) -> bool:
+        return self.__is_continuous
+
+    @is_continuous.setter
+    def is_continuous(self, flag: bool):
+        self.__is_continuous = flag
+
+    @property
+    def is_shuffle(self):
+        return self.__is_shuffle
+
+    @is_shuffle.setter
+    def is_shuffle(self, flag: bool):
+        self.__is_shuffle = flag
+
+    @property
+    def volume(self):
+        return self.__volume
+
     # volume: 양의 실수(0.0 ~ 1.0)
-    def set_volume(self, volume):
-        self.volume = volume
-        pygame.mixer.music.set_volume(self.volume)
+    @volume.setter
+    def volume(self, volume: float):
+        self.__volume = volume
+        pygame.mixer.music.set_volume(self.__volume)
+
+    @property
+    def temp_list(self) -> list[str]:
+        return self.__temp_list
+
+    @property
+    def current_song(self) -> str:
+        return self.__current_song
+
+    @property
+    def is_active(self) -> bool:
+        return self.__is_active
+
+    @property
+    def is_busy(self) -> bool:
+        self.__is_busy = pygame.mixer.music.get_busy()
+        return self.__is_busy
