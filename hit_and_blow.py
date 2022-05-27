@@ -324,9 +324,6 @@ class HitBlowWindow(QMainWindow, form_class):
         if result_dict['hit'] == self.__game_manager.digit:
             QMessageBox.about(self, 'Success!', "Success! Restart Game.")
             self.init_game()
-            # 이미 init_game에 렌더링 함수가 있어서
-            # 렌더링 피하기 위해 리턴
-            return
         else:
             # 현재 라운드, 사용자가 어떤 답을 입력했는지, 비교 결과 등을 로그에 출력
             self.write_log(
@@ -340,9 +337,6 @@ class HitBlowWindow(QMainWindow, form_class):
                 QMessageBox.about(self, 'Game Over',
                                   f"Game Over. Goal was {self.reduce_answer(self.__game_manager.task)}. Restart Game.")
                 self.init_game()
-                # 이미 init_game에 렌더링 함수가 있어서
-                # 렌더링 피하기 위해 리턴
-                return
 
     # 새 게임 버튼 클릭 시
     def btn_new_game_clicked(self):
