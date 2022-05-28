@@ -11,10 +11,11 @@ import random
 # number 리스트 내의 각 수의 범위는 0 ~ (n - 1)
 # color 리스트 내의 각 수의 범위는 0 ~ (c - 1)
 # n이 p보다 작으면 {} 리턴
-# ex) n = 13, p = 4, c = 4      ==>     {"color": [0, 1, 3, 1], "number": [11, 3, 12, 5]}(단, 각 자리의 수는 랜덤)
-# ex) n = 10, p = 4, c = 1      ==>     {"color": [0, 0, 0, 0], "number": [9, 0, 1, 4]}(단, 각 자리의 수는 랜덤)
+# can_duplicate이 True면 중복 값 허용
+# ex) n = 13, p = 4, c = 4      ==>     {"c": [0, 1, 3, 1], "n": [11, 3, 12, 5]}(단, 각 자리의 수는 랜덤)
+# ex) n = 10, p = 4, c = 1      ==>     {"c": [0, 0, 0, 0], "n": [9, 0, 1, 4]}(단, 각 자리의 수는 랜덤)
 # ex) n = 4, p = 5, c = 1       ==>     {}
-def create_task_dict(number, position, color, color_key="c", number_key="n"):
+def create_task_dict(number, position, color, can_duplicate=False, color_key="c", number_key="n"):
     result = {}
     # 코드 작성
     return result
@@ -27,3 +28,4 @@ if __name__ == "__main__":
     print(create_task_dict(10, 4, 1))
     print(create_task_dict(4, 5, 1))
     print(create_task_dict(13, 6, 4, "color", "number"))
+    print(create_task_dict(10, 4, 1, True))
