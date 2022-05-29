@@ -222,6 +222,7 @@ class HitBlowWindow(QMainWindow, form_class):
         if not self.__sound_player.is_busy and self.__sound_player.is_active:
             # 다음 곡 재생
             self.__sound_player.queue_song()
+            self.render_sound_player()
         # UI 렌더링
         self.render_ui()
 
