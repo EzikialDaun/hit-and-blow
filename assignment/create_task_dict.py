@@ -15,7 +15,7 @@ import random
 # ex) n = 13, p = 4, c = 4      ==>     {"c": [0, 1, 3, 1], "n": [11, 3, 12, 5]}(단, 각 자리의 수는 랜덤)
 # ex) n = 10, p = 4, c = 1      ==>     {"c": [0, 0, 0, 0], "n": [9, 0, 1, 4]}(단, 각 자리의 수는 랜덤)
 # ex) n = 4, p = 5, c = 1       ==>     {}
-def create_task_dict(number, position, color, can_duplicate=False, color_key="c", number_key="n"):
+def create_task_dict(number, position, color=1, can_duplicate=False, color_key="c", number_key="n"):
     result = {}
     # 코드 작성
     return result

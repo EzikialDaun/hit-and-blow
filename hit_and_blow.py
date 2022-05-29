@@ -64,6 +64,7 @@ class HitBlowWindow(QMainWindow, form_class):
         # 카드 파일 자동화를 위한 변수들
         image_path: str = 'resource/image/'
         self.__card_suit: list[str] = ["spade", "heart", "diamond", "club"]
+        self.__card_char: list[str] = ["♠", "♥", "◆", "♣"]
         self.__card_symbol: list[str] = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
         self.__image_list: list[list[str]] = [["" for _ in range(len(self.__card_symbol))] for _ in
                                               range(len(self.__card_suit))]
@@ -74,6 +75,18 @@ class HitBlowWindow(QMainWindow, form_class):
         self.arrow_down.setPixmap(QtGui.QPixmap(resource_path(f"{image_path}arrow_down.png")))
         # 아이콘 이미지
         self.setWindowIcon(QIcon(resource_path(f"{image_path}/icon.png")))
+        # 콤보박스 초기화
+        self.combo_difficulty.addItem("1")
+        self.combo_difficulty.addItem("2")
+        self.combo_difficulty.addItem("3")
+        self.combo_difficulty.addItem("4")
+        self.combo_difficulty.addItem("Custom")
+        # 위젯 숨기기
+        self.chk_extra_deck.hide()
+        self.label_try_count.hide()
+        self.spin_max_try_count.hide()
+        self.label_symbol.hide()
+        self.spin_max_color.hide()
         # 위젯 이벤트 연결
         self.btn_try.clicked.connect(self.btn_try_clicked)
         self.btn_new_game.clicked.connect(self.btn_new_game_clicked)
@@ -88,6 +101,7 @@ class HitBlowWindow(QMainWindow, form_class):
         self.slider_volume.valueChanged.connect(self.slider_volume_changed)
         self.chk_continuous.stateChanged.connect(self.chk_continuous_changed)
         self.chk_shuffle.stateChanged.connect(self.chk_shuffle_changed)
+        self.combo_difficulty.currentTextChanged.connect(self.combo_difficulty_changed)
         # 타이머
         self.__timer: QTimer = QTimer(self)
         self.__timer.start(100)
@@ -103,6 +117,7 @@ class HitBlowWindow(QMainWindow, form_class):
         self.__sound_player: sp.SoundPlayer = sp.SoundPlayer()
         # 설정 불러오기
         self.get_config()
+        self.render_sound_player()
         # 게임 초기화
         self.init_game()
 
@@ -120,6 +135,7 @@ class HitBlowWindow(QMainWindow, form_class):
         self.__try_count = self.spin_max_try_count.value()
         # 게임 매니저 초기화
         max_digit = 4
+        # 숫자 중복 가능 여부 설정
         self.__game_manager.init_game(max_number, max_digit, max_color)
         # 답안 초기화
         self.__answer = {self.__game_manager.key_color: [0 for _ in range(self.__game_manager.digit)],
@@ -130,6 +146,15 @@ class HitBlowWindow(QMainWindow, form_class):
         self.__round = 0
         # 로그 초기화
         self.__log = ""
+        # 로그 표시
+        self.txt_log.setText(self.__log)
+
+    def render_sound_player(self):
+        # 플레이리스트 표시
+        str_playlist = ""
+        for music in self.__sound_player.temp_list:
+            str_playlist += f"{sp.minimize_file_name(music)}\n"
+        self.txt_playlist.setText(str_playlist)
 
     # 렌더링 함수
     def render_ui(self):
@@ -157,8 +182,6 @@ class HitBlowWindow(QMainWindow, form_class):
         interval_pos = 150
         base_pos_y = -10
         self.arrow_down.move(base_pos_x + (interval_pos * self.__cursor), base_pos_y)
-        # 로그 표시
-        self.txt_log.setText(self.__log)
         # 남은 기회 표시
         self.txt_try_count.setText(f"{self.__try_count}")
         # 남은 기회가 3회 이하면 빨간색 글씨로 강조
@@ -167,11 +190,6 @@ class HitBlowWindow(QMainWindow, form_class):
         else:
             self.txt_try_count.setStyleSheet("Color : black")
         # 사운드 플레이어 렌더링
-        # 플레이리스트 표시
-        str_playlist = ""
-        for music in self.__sound_player.temp_list:
-            str_playlist += f"{sp.minimize_file_name(music)}\n"
-        self.txt_playlist.setText(str_playlist)
         # 현재 재생 곡 표시
         self.txt_current_song.setText(sp.minimize_file_name(self.__sound_player.current_song))
         # 셔플 여부 표시
@@ -184,7 +202,7 @@ class HitBlowWindow(QMainWindow, form_class):
     # 유저 답안 또는 문제의 데이터 형식을 입력받아
     # 사용자가 알아보기 쉽게 포맷팅해주고 리턴하는 함수
     def reduce_answer(self, answer: dict[str, list[int]]) -> list[str]:
-        result = [self.__card_suit[answer[self.__game_manager.key_color][i]][0].upper() + self.__card_symbol[
+        result = [self.__card_char[answer[self.__game_manager.key_color][i]] + self.__card_symbol[
             answer[self.__game_manager.key_number][i]]
                   for i in range(self.__game_manager.digit)]
         return result
@@ -254,36 +272,42 @@ class HitBlowWindow(QMainWindow, form_class):
         self.btn_play.hide()
         self.btn_pause.show()
         self.btn_resume.hide()
+        self.render_sound_player()
 
     def btn_pause_clicked(self):
         self.__sound_player.pause()
         self.btn_play.hide()
         self.btn_pause.hide()
         self.btn_resume.show()
+        self.render_sound_player()
 
     def btn_resume_clicked(self):
         self.__sound_player.unpause()
         self.btn_play.hide()
         self.btn_pause.show()
         self.btn_resume.hide()
+        self.render_sound_player()
 
     def btn_stop_clicked(self):
         self.__sound_player.stop()
         self.btn_play.show()
         self.btn_pause.hide()
         self.btn_resume.hide()
+        self.render_sound_player()
 
     def btn_prev_clicked(self):
         self.__sound_player.prev_song()
         self.btn_play.hide()
         self.btn_pause.show()
         self.btn_resume.hide()
+        self.render_sound_player()
 
     def btn_next_clicked(self):
         self.__sound_player.next_song()
         self.btn_play.hide()
         self.btn_pause.show()
         self.btn_resume.hide()
+        self.render_sound_player()
 
     def btn_clear_clicked(self):
         reply = QMessageBox.question(self, 'Warning',
@@ -295,6 +319,7 @@ class HitBlowWindow(QMainWindow, form_class):
             self.btn_play.show()
             self.btn_pause.hide()
             self.btn_resume.hide()
+            self.render_sound_player()
 
     def chk_continuous_changed(self, state):
         result: bool = False
@@ -331,6 +356,8 @@ class HitBlowWindow(QMainWindow, form_class):
                 f"{self.reduce_answer(self.__answer)} "
                 f"{result_dict}",
                 "Result")
+            # 로그 표시
+            self.txt_log.setText(self.__log)
             # 시도 횟수가 없으면
             if self.__try_count <= 0:
                 # 게임 종료
@@ -352,6 +379,31 @@ class HitBlowWindow(QMainWindow, form_class):
         for music_path in path_list:
             self.__sound_player.add_playlist(music_path)
         self.save_config()
+        self.render_sound_player()
+
+    def combo_difficulty_changed(self, value):
+        if value == "Custom":
+            self.chk_extra_deck.show()
+            self.spin_max_try_count.show()
+            self.spin_max_color.show()
+            self.label_symbol.show()
+            self.label_try_count.show()
+        else:
+            self.chk_extra_deck.hide()
+            self.spin_max_try_count.hide()
+            self.spin_max_color.hide()
+            self.label_symbol.hide()
+            self.label_try_count.hide()
+            self.chk_extra_deck.setChecked(False)
+            self.spin_max_try_count.setValue(10)
+            if value == "1":
+                self.spin_max_color.setValue(1)
+            elif value == "2":
+                self.spin_max_color.setValue(2)
+            elif value == "3":
+                self.spin_max_color.setValue(3)
+            elif value == "4":
+                self.spin_max_color.setValue(4)
 
     # 설정 저장
     def save_config(self):
