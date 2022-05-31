@@ -22,18 +22,25 @@ class HitBlowManager:
         result = {"hit": 0, "blow": 0}
         hit = 0
         blow = 0
-        for i in range(len(user_data[self.__key_number])):
-            is_number_correct = user_data[self.__key_number][i] == self.__task[self.__key_number][i]
-            is_color_correct = user_data[self.__key_color][i] == self.__task[self.__key_color][i]
-            # 숫자와 자리와 색깔이 일치하면 hit
-            if is_number_correct and is_color_correct:
-                hit += 1
-            # 자리 숫자 일치 but 색깔 불일치 blow
-            elif is_number_correct and not is_color_correct:
-                blow += 1
-            # 숫자가 존재하면 blow
-            elif user_data[self.__key_number][i] in self.__task[self.__key_number]:
-                blow += 1
+        user_number_list = user_data[self.__key_number]
+        task_number_list = self.__task[self.__key_number]
+        dict_by_user_number = {}
+        for num in set(user_number_list):
+            index_list = [i for i, val in enumerate(user_number_list) if val == num]
+            if len(index_list) > 0:
+                dict_by_user_number[str(num)] = index_list
+        for key, value in dict_by_user_number.items():
+            int_key = int(key)
+            if int_key in task_number_list:
+                task_index = task_number_list.index(int_key)
+                is_number_correct = task_index in value
+                is_color_correct = user_data[self.__key_color][task_index] == self.__task[self.__key_color][task_index]
+                if is_number_correct and is_color_correct:
+                    hit += 1
+                elif is_number_correct and not is_color_correct:
+                    blow += 1
+                else:
+                    blow += 1
         result.update({"hit": hit})
         result.update({"blow": blow})
         return result

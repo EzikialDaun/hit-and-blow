@@ -70,9 +70,14 @@ class HitBlowWindow(QMainWindow, form_class):
                                               range(len(self.__card_suit))]
         for suit in range(len(self.__card_suit)):
             for num in range(len(self.__card_symbol)):
-                self.__image_list[suit][num] = f"{image_path}{self.__card_suit[suit]}_{num + 1}.png"
+                self.__image_list[suit][num] = f"{image_path}{self.__card_suit[suit]}_{num + 1}.jpeg"
         # 카드 커서 이미지 지정
         self.arrow_down.setPixmap(QtGui.QPixmap(resource_path(f"{image_path}arrow_down.png")))
+        self.key_a.setPixmap(QtGui.QPixmap(resource_path(f"{image_path}key_a.jpeg")))
+        self.key_d.setPixmap(QtGui.QPixmap(resource_path(f"{image_path}key_d.jpeg")))
+        self.key_w.setPixmap(QtGui.QPixmap(resource_path(f"{image_path}key_w.jpeg")))
+        self.key_s.setPixmap(QtGui.QPixmap(resource_path(f"{image_path}key_s.jpeg")))
+        self.key_f.setPixmap(QtGui.QPixmap(resource_path(f"{image_path}key_f.jpeg")))
         # 아이콘 이미지
         self.setWindowIcon(QIcon(resource_path(f"{image_path}/icon.png")))
         # 콤보박스 초기화
