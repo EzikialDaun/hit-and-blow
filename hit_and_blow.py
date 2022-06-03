@@ -103,6 +103,9 @@ class HitBlowWindow(QMainWindow, form_class):
         self.btn_pause.clicked.connect(self.btn_pause_clicked)
         self.btn_resume.clicked.connect(self.btn_resume_clicked)
         self.btn_stop.clicked.connect(self.btn_stop_clicked)
+        self.spin_max_try_count.valueChanged.connect(self.spin_max_try_count_changed)
+        self.spin_max_color.valueChanged.connect(self.spin_max_color_changed)
+        self.chk_extra_deck.stateChanged.connect(self.chk_extra_deck_changed)
         self.slider_volume.valueChanged.connect(self.slider_volume_changed)
         self.chk_continuous.stateChanged.connect(self.chk_continuous_changed)
         self.chk_shuffle.stateChanged.connect(self.chk_shuffle_changed)
@@ -153,6 +156,8 @@ class HitBlowWindow(QMainWindow, form_class):
         self.__log = ""
         # 로그 표시
         self.txt_log.setText(self.__log)
+        self.label_warn_1.hide()
+        self.label_warn_2.hide()
 
     def render_sound_player(self):
         # 플레이리스트 표시
@@ -220,6 +225,8 @@ class HitBlowWindow(QMainWindow, form_class):
         else:
             QMessageBox.about(self, title, content)
             self.__log += f"[{title}] {content}\n"
+        # 로그 표시
+        self.txt_log.setText(self.__log)
 
     # 이벤트 루프. 0.1초마다 실행
     def event_loop(self):
@@ -263,9 +270,12 @@ class HitBlowWindow(QMainWindow, form_class):
         # 'F'
         # 카드 색 바꾸기
         elif e.key() == Qt.Key_F:
-            self.__answer[self.__game_manager.key_color][self.__cursor] = \
-                (self.__answer[self.__game_manager.key_color][
-                     self.__cursor] + 1) % self.__game_manager.max_color
+            if self.__game_manager.max_color == 1:
+                self.write_log("[Info] Cannot change the symbol. Currently 1 max. symbol.")
+            else:
+                self.__answer[self.__game_manager.key_color][self.__cursor] = \
+                    (self.__answer[self.__game_manager.key_color][
+                         self.__cursor] + 1) % self.__game_manager.max_color
         # 렌더링
         self.render_ui()
 
@@ -362,8 +372,6 @@ class HitBlowWindow(QMainWindow, form_class):
                 f"{self.reduce_answer(self.__answer)} "
                 f"{result_dict}",
                 "Result")
-            # 로그 표시
-            self.txt_log.setText(self.__log)
             # 시도 횟수가 없으면
             if self.__try_count <= 0:
                 # 게임 종료
@@ -387,7 +395,12 @@ class HitBlowWindow(QMainWindow, form_class):
         self.save_config()
         self.render_sound_player()
 
+    def setting_changed(self):
+        self.label_warn_1.show()
+        self.label_warn_2.show()
+
     def combo_difficulty_changed(self, value):
+        self.setting_changed()
         if value == "Custom":
             self.chk_extra_deck.show()
             self.spin_max_try_count.show()
@@ -410,6 +423,15 @@ class HitBlowWindow(QMainWindow, form_class):
                 self.spin_max_color.setValue(3)
             elif value == "4":
                 self.spin_max_color.setValue(4)
+
+    def spin_max_try_count_changed(self):
+        self.setting_changed()
+
+    def spin_max_color_changed(self):
+        self.setting_changed()
+
+    def chk_extra_deck_changed(self):
+        self.setting_changed()
 
     # 설정 저장
     def save_config(self):

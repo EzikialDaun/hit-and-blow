@@ -40,7 +40,7 @@
    <enum>Qt::ClickFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>Hit &amp; Blow</string>
+   <string>Hit &amp; Trump v1.0</string>
   </property>
   <widget class="QLabel" name="digit_0">
    <property name="geometry">
@@ -845,6 +845,48 @@
     <string>/</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label_warn_1">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>505</y>
+     <width>180</width>
+     <height>15</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Noto Sans KR</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>The settings have been changed</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_warn_2">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>525</y>
+     <width>180</width>
+     <height>15</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Noto Sans KR</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Press the 'New Game' button</string>
+   </property>
+  </widget>
   <zorder>btn_resume</zorder>
   <zorder>btn_pause</zorder>
   <zorder>digit_0</zorder>
@@ -888,6 +930,8 @@
   <zorder>label_7</zorder>
   <zorder>label_8</zorder>
   <zorder>label_9</zorder>
+  <zorder>label_warn_1</zorder>
+  <zorder>label_warn_2</zorder>
  </widget>
  <resources/>
  <connections/>
