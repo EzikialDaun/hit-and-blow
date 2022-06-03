@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from origin import hit_blow_manager as hbm
 from origin import sound_player as sp
-from origin import json_config as jc
+from IMY import json_config as jc
 
 
 # 배포 시 리소스 참조 오류 방지하기 위한 함수
