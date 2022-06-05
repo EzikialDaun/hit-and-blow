@@ -49,6 +49,9 @@ class HitBlowWindow(QMainWindow, form_class):
         # form_class에 속한 메서드
         # UI 셋업
         self.setupUi(self)
+        # 버전 설정
+        version = 1.01
+        self.setWindowTitle(f"Hit & Trump v{version}")
         # 게임 매니저
         self.__game_manager: hbm.HitBlowManager = hbm.HitBlowManager()
         # 시도 횟수

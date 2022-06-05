@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>window_main</class>
+ <widget class="QDialog" name="window_main">
   <property name="enabled">
    <bool>true</bool>
   </property>
@@ -658,7 +658,7 @@
     <enum>Qt::ClickFocus</enum>
    </property>
    <property name="frameShape">
-    <enum>QFrame::Box</enum>
+    <enum>QFrame::NoFrame</enum>
    </property>
    <property name="text">
     <string/>
@@ -698,7 +698,7 @@
     <enum>Qt::ClickFocus</enum>
    </property>
    <property name="frameShape">
-    <enum>QFrame::Box</enum>
+    <enum>QFrame::NoFrame</enum>
    </property>
    <property name="text">
     <string/>
@@ -717,7 +717,7 @@
     <enum>Qt::ClickFocus</enum>
    </property>
    <property name="frameShape">
-    <enum>QFrame::Box</enum>
+    <enum>QFrame::NoFrame</enum>
    </property>
    <property name="text">
     <string/>
@@ -736,7 +736,7 @@
     <enum>Qt::ClickFocus</enum>
    </property>
    <property name="frameShape">
-    <enum>QFrame::Box</enum>
+    <enum>QFrame::NoFrame</enum>
    </property>
    <property name="text">
     <string/>
@@ -776,7 +776,7 @@
     <enum>Qt::ClickFocus</enum>
    </property>
    <property name="frameShape">
-    <enum>QFrame::Box</enum>
+    <enum>QFrame::NoFrame</enum>
    </property>
    <property name="text">
     <string/>
